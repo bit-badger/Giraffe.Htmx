@@ -50,58 +50,52 @@ type HttpRequest with
 /// HTTP handlers for setting output headers
 [<AutoOpen>]
 module Handlers =
-  
-  /// Serialize an object to JSON (supports triggering multiple events)
-  let private toJson (it : obj) =
-    match it with
-    | :? string as x -> x
-    | _ -> "" // TODO: serialize object
-    |> StringValues
 
-  /// Pushes a new url into the history stack
+  /// Serialize a list of key/value pairs to JSON (very rudimentary)
+  let private toJson (evts : (string * string) list) =
+    evts
+    |> List.map (fun evt -> sprintf "\"%s\": \"%s\"" (fst evt) ((snd evt).Replace ("\"", "\\\"")))
+    |> String.concat ", "
+    |> (sprintf "{ %s }" >> StringValues)
+
+  /// Set a header
+  let private setHeader item value : HttpHandler =
+    fun next ctx ->
+      ctx.Response.Headers.[item] <- value
+      next ctx
+
+  // Pushes a new url into the history stack
   let withHxPush (push : bool) : HttpHandler =
-    fun next ctx -> task {
-      ctx.Response.Headers.["HX-Push"] <- push |> (string >> StringValues)
-      return! next ctx
-      }
-  
+    push |> (string >> StringValues >> setHeader "HX-Push")
+
   /// Can be used to do a client-side redirect to a new location
   let withHxRedirect (url : string) : HttpHandler =
-    fun next ctx -> task {
-      ctx.Response.Headers.["HX-Redirect"] <- StringValues url
-      return! next ctx
-      }
-  
+    StringValues url |> setHeader "HX-Redirect" 
+
   /// If set to `true` the client side will do a a full refresh of the page
   let withHxRefresh (refresh : bool) : HttpHandler =
-    fun next ctx -> task {
-      ctx.Response.Headers.["HX-Redirect"] <- refresh |> (string >> StringValues)
-      return! next ctx
-      }
+    refresh |> (string >> StringValues >> setHeader "HX-Refresh")
 
-  /// Allows you to trigger client side events
-  /// 
-  /// _(strings will be passed verbatim; objects will be JSON-encoded)_
-  let withHxTrigger (trig : obj) : HttpHandler =
-    fun next ctx -> task {
-      ctx.Response.Headers.["HX-Trigger"] <- toJson trig
-      return! next ctx
-      }
-    
-  /// Allows you to trigger client side events after changes have settled
-  /// 
-  /// _(strings will be passed verbatim; objects will be JSON-encoded)_
-  let withHxTriggerAfterSettle (trig : obj) : HttpHandler =
-    fun next ctx -> task {
-      ctx.Response.Headers.["HX-Trigger-After-Settle"] <- toJson trig
-      return! next ctx
-      }
-    
-  /// Allows you to trigger client side events after DOM swapping occurs
-  /// 
-  /// _(strings will be passed verbatim; objects will be JSON-encoded)_
-  let withHxTriggerAfterSwap (trig : obj) : HttpHandler =
-    fun next ctx -> task {
-      ctx.Response.Headers.["HX-Trigger-After-Swap"] <- toJson trig
-      return! next ctx
-      }
+  /// Allows you to trigger a single client side event
+  let withHxTrigger (evt : string) : HttpHandler =
+    StringValues evt |> setHeader "HX-Trigger"
+
+  /// Allows you to trigger multiple client side events
+  let withHxTriggerMany evts : HttpHandler =
+    toJson evts |> setHeader "HX-Trigger"
+
+  /// Allows you to trigger a single client side event after changes have settled
+  let withHxTriggerAfterSettle (evt : string) : HttpHandler =
+    StringValues evt |> setHeader "HX-Trigger-After-Settle"
+
+  /// Allows you to trigger multiple client side events after changes have settled
+  let withHxTriggerManyAfterSettle evts : HttpHandler =
+    toJson evts |> setHeader "HX-Trigger-After-Settle"
+
+  /// Allows you to trigger a single client side event after DOM swapping occurs
+  let withHxTriggerAfterSwap (evt : string) : HttpHandler =
+    StringValues evt |> setHeader "HX-Trigger-After-Swap"
+
+  /// Allows you to trigger multiple client side events after DOM swapping occurs
+  let withHxTriggerManyAfterSwap evts : HttpHandler =
+    toJson evts |> setHeader "HX-Trigger-After-Swap"
