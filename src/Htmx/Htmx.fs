@@ -23,7 +23,7 @@ type IHeaderDictionary with
   /// The user response to an `hx-prompt`
   member this.HxPrompt with get () = hdr this "HX-Prompt"
 
-  /// Always `true`
+  /// `true` if the request came from HTMX
   member this.HxRequest with get () = hdr this "HX-Request" |> Option.map bool.Parse
 
   /// The `id` of the target element if it exists
@@ -51,51 +51,49 @@ type HttpRequest with
 [<AutoOpen>]
 module Handlers =
 
+  /// Convert a boolean to lowercase `true` or `false`
+  let private toLowerBool (trueOrFalse : bool) =
+    (string trueOrFalse).ToLowerInvariant ()
+
   /// Serialize a list of key/value pairs to JSON (very rudimentary)
   let private toJson (evts : (string * string) list) =
     evts
     |> List.map (fun evt -> sprintf "\"%s\": \"%s\"" (fst evt) ((snd evt).Replace ("\"", "\\\"")))
     |> String.concat ", "
-    |> (sprintf "{ %s }" >> StringValues)
-
-  /// Set a header
-  let private setHeader item value : HttpHandler =
-    fun next ctx ->
-      ctx.Response.Headers.[item] <- value
-      next ctx
+    |> sprintf "{ %s }"
 
   // Pushes a new url into the history stack
-  let withHxPush (push : bool) : HttpHandler =
-    push |> (string >> StringValues >> setHeader "HX-Push")
+  let withHxPush : bool -> HttpHandler =
+    toLowerBool >> setHttpHeader "HX-Push"
 
   /// Can be used to do a client-side redirect to a new location
-  let withHxRedirect (url : string) : HttpHandler =
-    StringValues url |> setHeader "HX-Redirect" 
+  let withHxRedirect : string -> HttpHandler =
+    setHttpHeader "HX-Redirect"
 
   /// If set to `true` the client side will do a a full refresh of the page
-  let withHxRefresh (refresh : bool) : HttpHandler =
-    refresh |> (string >> StringValues >> setHeader "HX-Refresh")
+  let withHxRefresh : bool -> HttpHandler =
+    toLowerBool >> setHttpHeader "HX-Refresh"
 
   /// Allows you to trigger a single client side event
-  let withHxTrigger (evt : string) : HttpHandler =
-    StringValues evt |> setHeader "HX-Trigger"
+  let withHxTrigger : string -> HttpHandler =
+    setHttpHeader "HX-Trigger"
 
   /// Allows you to trigger multiple client side events
   let withHxTriggerMany evts : HttpHandler =
-    toJson evts |> setHeader "HX-Trigger"
+    toJson evts |> setHttpHeader "HX-Trigger"
 
   /// Allows you to trigger a single client side event after changes have settled
-  let withHxTriggerAfterSettle (evt : string) : HttpHandler =
-    StringValues evt |> setHeader "HX-Trigger-After-Settle"
+  let withHxTriggerAfterSettle : string -> HttpHandler =
+    setHttpHeader "HX-Trigger-After-Settle"
 
   /// Allows you to trigger multiple client side events after changes have settled
   let withHxTriggerManyAfterSettle evts : HttpHandler =
-    toJson evts |> setHeader "HX-Trigger-After-Settle"
+    toJson evts |> setHttpHeader "HX-Trigger-After-Settle"
 
   /// Allows you to trigger a single client side event after DOM swapping occurs
-  let withHxTriggerAfterSwap (evt : string) : HttpHandler =
-    StringValues evt |> setHeader "HX-Trigger-After-Swap"
+  let withHxTriggerAfterSwap : string -> HttpHandler =
+    setHttpHeader "HX-Trigger-After-Swap"
 
   /// Allows you to trigger multiple client side events after DOM swapping occurs
   let withHxTriggerManyAfterSwap evts : HttpHandler =
-    toJson evts |> setHeader "HX-Trigger-After-Swap"
+    toJson evts |> setHttpHeader "HX-Trigger-After-Swap"
