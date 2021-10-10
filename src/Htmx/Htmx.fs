@@ -63,8 +63,8 @@ module Handlers =
     |> sprintf "{ %s }"
 
   // Pushes a new url into the history stack
-  let withHxPush : bool -> HttpHandler =
-    toLowerBool >> setHttpHeader "HX-Push"
+  let withHxPush : string -> HttpHandler =
+    setHttpHeader "HX-Push"
 
   /// Can be used to do a client-side redirect to a new location
   let withHxRedirect : string -> HttpHandler =
