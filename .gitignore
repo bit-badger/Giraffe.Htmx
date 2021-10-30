@@ -3,3 +3,5 @@
 
 .fake
 .ionide
+.idea
+*.user

@@ -50,8 +50,8 @@ module HxTrigger =
     match trigger.Contains "[" with
     | true ->
         let parts = trigger.Split ('[', ']')
-        sprintf "%s[%s&&%s]" parts.[0] parts.[1] filter
-    | false -> sprintf "%s[%s]" trigger filter
+        $"{parts.[0]}[{parts.[1]}&&{filter}]"
+    | false -> $"{trigger}[{filter}]"
   /// Trigger the event on a click
   let Click = "click"
   /// Trigger the event on page load
@@ -81,9 +81,9 @@ module HxTrigger =
 /// Attributes and flags for HTMX
 [<AutoOpen>]
 module HtmxAttrs =
-  /// Progressively enhances anchors and forms to use AJAX requests
+  /// Progressively enhances anchors and forms to use AJAX requests (use `_hxNoBoost` to set to false)
   let _hxBoost      = attr "hx-boost" "true"
-  /// Shows a confim() dialog before issuing a request
+  /// Shows a confirm() dialog before issuing a request
   let _hxConfirm    = attr "hx-confirm"
   /// Issues a DELETE to the specified URL
   let _hxDelete     = attr "hx-delete"
@@ -103,6 +103,8 @@ module HtmxAttrs =
   let _hxInclude    = attr "hx-include"
   /// The element to put the htmx-request class on during the AJAX request
   let _hxIndicator  = attr "hx-indicator"
+  /// Overrides a previous `hx-boost`
+  let _hxNoBoost    = attr "hx-boost" "false"
   /// Filters the parameters that will be submitted with a request
   let _hxParams     = attr "hx-params"
   /// Issues a PATCH to the specified URL
@@ -123,10 +125,10 @@ module HtmxAttrs =
   let _hxSelect     = attr "hx-select"
   /// Establishes and listens to Server Sent Event (SSE) sources for events
   let _hxSse        = attr "hx-sse"
-  /// Marks content in a response as being "Out of Band", i.e. swapped somewhere other than the target
-  let _hxSwapOob    = attr "hx-swap-oob"
   /// Controls how the response content is swapped into the DOM (e.g. 'outerHTML' or 'beforeEnd')
   let _hxSwap       = attr "hx-swap"
+  /// Marks content in a response as being "Out of Band", i.e. swapped somewhere other than the target
+  let _hxSwapOob    = attr "hx-swap-oob"
   /// Specifies the target element to be swapped
   let _hxTarget     = attr "hx-target"
   /// Specifies the event that triggers the request
