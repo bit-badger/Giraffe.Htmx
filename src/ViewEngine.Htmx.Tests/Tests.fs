@@ -3,6 +3,126 @@ module Giraffe.ViewEngine.Htmx.Tests
 open Giraffe.ViewEngine
 open Xunit
 
+/// Tests for the HxEncoding module
+module Encoding =
+  
+  [<Fact>]
+  let ``Form is correct`` () =
+    Assert.Equal ("application/x-www-form-urlencoded", HxEncoding.Form)
+  
+  [<Fact>]
+  let ``MultipartForm is correct`` () =
+    Assert.Equal ("multipart/form-data", HxEncoding.MultipartForm)
+
+
+/// Tests for the HxParams module
+module Params =
+  
+  [<Fact>]
+  let ``All is correct`` () =
+    Assert.Equal ("*", HxParams.All)
+  
+  [<Fact>]
+  let ``None is correct`` () =
+    Assert.Equal ("none", HxParams.None)
+
+  [<Fact>]
+  let ``With succeeds with empty list`` () =
+    Assert.Equal ("", HxParams.With [])
+  
+  [<Fact>]
+  let ``With succeeds with one list item`` () =
+    Assert.Equal ("boo", HxParams.With [ "boo" ])
+  
+  [<Fact>]
+  let ``With succeeds with multiple list items`` () =
+    Assert.Equal ("foo,bar,baz", HxParams.With [ "foo"; "bar"; "baz" ])
+
+  [<Fact>]
+  let ``Except succeeds with empty list`` () =
+    Assert.Equal ("not ", HxParams.Except [])
+  
+  [<Fact>]
+  let ``Except succeeds with one list item`` () =
+    Assert.Equal ("not that", HxParams.Except [ "that" ])
+  
+  [<Fact>]
+  let ``Except succeeds with multiple list items`` () =
+    Assert.Equal ("not blue,green", HxParams.Except [ "blue"; "green" ])
+
+
+/// Tests for the HxSwap module
+module Swap =
+  
+  [<Fact>]
+  let ``InnerHtml is correct`` () =
+    Assert.Equal ("innerHTML", HxSwap.InnerHtml)
+
+  [<Fact>]
+  let ``OuterHtml is correct`` () =
+    Assert.Equal ("outerHTML", HxSwap.OuterHtml)
+
+  [<Fact>]
+  let ``BeforeBegin is correct`` () =
+    Assert.Equal ("beforebegin", HxSwap.BeforeBegin)
+
+  [<Fact>]
+  let ``BeforeEnd is correct`` () =
+    Assert.Equal ("beforeend", HxSwap.BeforeEnd)
+
+  [<Fact>]
+  let ``AfterBegin is correct`` () =
+    Assert.Equal ("afterbegin", HxSwap.AfterBegin)
+
+  [<Fact>]
+  let ``AfterEnd is correct`` () =
+    Assert.Equal ("afterend", HxSwap.AfterEnd)
+
+  [<Fact>]
+  let ``None is correct`` () =
+    Assert.Equal ("none", HxSwap.None)
+
+
+/// Tests for the HxTrigger module
+module Trigger =
+  
+  [<Fact>]
+  let ``Click is correct`` () =
+    Assert.Equal ("click", HxTrigger.Click)
+  
+  [<Fact>]
+  let ``Load is correct`` () =
+    Assert.Equal ("load", HxTrigger.Load)
+  
+  [<Fact>]
+  let ``Filter.Alt succeeds`` () =
+    Assert.Equal ("click[altKey]", HxTrigger.Filter.Alt HxTrigger.Click)
+  
+  [<Fact>]
+  let ``Filter.Ctrl succeeds`` () =
+    Assert.Equal ("click[ctrlKey]", HxTrigger.Filter.Ctrl HxTrigger.Click)
+  
+  [<Fact>]
+  let ``Filter.Shift succeeds`` () =
+    Assert.Equal ("click[shiftKey]", HxTrigger.Filter.Shift HxTrigger.Click)
+  
+  [<Fact>]
+  let ``Filter.CtrlAlt succeeds`` () =
+    Assert.Equal ("click[ctrlKey&&altKey]", HxTrigger.Filter.CtrlAlt HxTrigger.Click)
+
+  [<Fact>]
+  let ``Filter.CtrlShift succeeds`` () =
+    Assert.Equal ("click[ctrlKey&&shiftKey]", HxTrigger.Filter.CtrlShift HxTrigger.Click)
+
+  [<Fact>]
+  let ``Filter.CtrlAltShift succeeds`` () =
+    Assert.Equal ("click[ctrlKey&&altKey&&shiftKey]", HxTrigger.Filter.CtrlAltShift HxTrigger.Click)
+
+  [<Fact>]
+  let ``Filter.AltShift succeeds`` () =
+    Assert.Equal ("click[altKey&&shiftKey]", HxTrigger.Filter.AltShift HxTrigger.Click)
+
+
 /// Tests for the HtmxAttrs module
 module Attributes =
   

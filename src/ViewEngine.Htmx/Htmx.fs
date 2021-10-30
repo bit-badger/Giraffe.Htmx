@@ -18,7 +18,7 @@ module HxParams =
   /// Include no parameters
   let None = "none"
   /// Include the specified parameters
-  let With   fields = fields |> List.reduce (fun acc it -> $"{acc},{it}")
+  let With   fields = match fields with [] -> "" | _ -> fields |> List.reduce (fun acc it -> $"{acc},{it}")
   /// Exclude the specified parameters
   let Except fields = With fields |> sprintf "not %s"
 
