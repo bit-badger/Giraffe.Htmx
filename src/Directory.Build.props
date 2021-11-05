@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <PropertyGroup>
+        <VersionPrefix>0.9.1</VersionPrefix>
+        <PackageReleaseNotes>Initial NuGet release</PackageReleaseNotes>
+        <Authors>danieljsummers</Authors>
+        <Company>Bit Badger Solutions</Company>
+        <PackageProjectUrl>https://github.com/bit-badger/Giraffe.Htmx</PackageProjectUrl>
+        <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+        <RepositoryUrl>https://github.com/bit-badger/Giraffe.Htmx</RepositoryUrl>
+        <RepositoryType>Git</RepositoryType>
+        <Copyright>MIT License</Copyright>
+        <PackageLicenseExpression>MIT</PackageLicenseExpression>
+        <PackageTags>Giraffe htmx</PackageTags>
+    </PropertyGroup>
+</Project>
