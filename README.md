@@ -10,9 +10,11 @@ htmx uses attributes and HTTP headers to attain its interactivity; the libraries
 
 `Giraffe.Htmx` provides extensions that facilitate using htmx on the server side, primarily reading and setting headers. `Giraffe.ViewEngine.Htmx` provides attributes and helpers to produce views that utilize htmx. Both can be installed from NuGet via standard methods.
 
-TODO: NuGet links
+| Server Side | View Engine |
+|---|---|
+|[![Nuget](https://img.shields.io/nuget/v/Giraffe.Htmx?style=plastic)](https://www.nuget.org/packages/Giraffe.Htmx/)|[![Nuget](https://img.shields.io/nuget/v/Giraffe.ViewEngine.Htmx?style=plastic)](https://www.nuget.org/packages/Giraffe.ViewEngine.Htmx/)|
 
-## Server-Side (`Giraffe.Htmx`)
+## Server Side (`Giraffe.Htmx`)
 
 In addition to the regular HTTP request payloads, htmx sets [one or more headers](https://htmx.org/docs/#request_headers) along with the request. Once `Giraffe.Htmx` is opened, these are available as properties on `HttpContext.Request.Headers`. These consist of the header name, translated to a .NET name (ex. `HX-Current-URL` becomes `HxCurrentUrl`), and a strongly-typed property based on the expected value of that header. Additionally, they are all exposed as `Option`s, as they may or may not be present for any given request.
 
@@ -39,7 +41,7 @@ htmx also utilizes [response headers](https://htmx.org/docs/#response_headers) t
 
 Of note is that the `HX-Trigger` headers can take either one or more events. For a single event with no parameters, use `withHxTrigger`; for a single event with parameters, or multiple events, use `withHxTriggerMany`. Both these have `AfterSettle` and `AfterSwap` versions as well.
 
-## htmx with Giraffe View Engine (`Giraffe.ViewEngine.Htmx`)
+## View Engine (`Giraffe.ViewEngine.Htmx`)
 
 As htmx uses [attributes](https://htmx.org/docs/#attributes) to extend HTML, the primary part of this library defines attributes that can be used within Giraffe views. Simply open `Giraffe.ViewEngine.Htmx`, and these attributes, along with support modules, will be visible.
 
@@ -64,3 +66,9 @@ Some attributes have known values, such as `hx-trigger` and `hx-swap`; for these
 ## Feedback / Help
 
 The author hangs out in the #htmx-general channel of the [htmx Discord server](https://htmx.org/discord) and the #web channel of the [F# Software Foundation's Slack server](https://fsharp.org/guides/slack/).
+
+## Thanks
+|[<img src="https://giraffe.wiki/giraffe.png" alt="Giraffe logo" width="200">](https://giraffe.wiki)|[<img src="https://bitbadger.solutions/htmx-black-transparent.svg" alt="htmx logo" width="200">](https://htmx.org)|[<img src="https://resources.jetbrains.com/storage/products/company/brand/logos/jb_beam.png" alt="JetBrains Logo (Main)" width="200">](https://jb.gg/OpenSource)|
+| :---: | :---: | :---: |
+|for making ASP.NET Core functional|for making HTML cool again|for licensing their tools to this project|
+
