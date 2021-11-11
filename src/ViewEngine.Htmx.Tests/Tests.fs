@@ -15,6 +15,19 @@ module Encoding =
     Assert.Equal ("multipart/form-data", HxEncoding.MultipartForm)
 
 
+/// Tests for the HxHeaders module
+module Headers =
+  
+  [<Fact>]
+  let ``From succeeds with an empty list`` () =
+    Assert.Equal ("{  }", HxHeaders.From [])
+  
+  [<Fact>]
+  let ``From succeeds and escapes quotes`` () =
+    Assert.Equal ("{ \"test\": \"one two three\", \"again\": \"four \\\"five\\\" six\" }",
+                  HxHeaders.From [ "test", "one two three"; "again", "four \"five\" six" ])
+
+
 /// Tests for the HxParams module
 module Params =
   
@@ -51,6 +64,43 @@ module Params =
     Assert.Equal ("not blue,green", HxParams.Except [ "blue"; "green" ])
 
 
+/// Tests for the HxRequest module
+module Request =
+  
+  [<Fact>]
+  let ``Configure succeeds with an empty list`` () =
+    Assert.Equal ("{  }", HxRequest.Configure [])
+  
+  [<Fact>]
+  let ``Configure succeeds with a non-empty list`` () =
+    Assert.Equal ("{ \"a\": \"b\", \"c\": \"d\" }", HxRequest.Configure [ "\"a\": \"b\""; "\"c\": \"d\"" ])
+  
+  [<Fact>]
+  let ``Configure succeeds with all known params configured`` () =
+    Assert.Equal ("{ \"timeout\": 1000, \"credentials\": false, \"noHeaders\": true }",
+                  HxRequest.Configure [ HxRequest.Timeout 1000; HxRequest.Credentials false; HxRequest.NoHeaders true ])
+  
+  [<Fact>]
+  let ``Timeout succeeds`` () =
+    Assert.Equal ("\"timeout\": 50", HxRequest.Timeout 50)
+  
+  [<Fact>]
+  let ``Credentials succeeds when set to true`` () =
+    Assert.Equal ("\"credentials\": true", HxRequest.Credentials true)
+  
+  [<Fact>]
+  let ``Credentials succeeds when set to false`` () =
+    Assert.Equal ("\"credentials\": false", HxRequest.Credentials false)
+  
+  [<Fact>]
+  let ``NoHeaders succeeds when set to true`` () =
+    Assert.Equal ("\"noHeaders\": true", HxRequest.NoHeaders true)
+  
+  [<Fact>]
+  let ``NoHeaders succeeds when set to false`` () =
+    Assert.Equal ("\"noHeaders\": false", HxRequest.NoHeaders false)
+
+  
 /// Tests for the HxSwap module
 module Swap =
   
@@ -95,6 +145,14 @@ module Trigger =
     Assert.Equal ("load", HxTrigger.Load)
   
   [<Fact>]
+  let ``Revealed is correct`` () =
+    Assert.Equal ("revealed", HxTrigger.Revealed)
+  
+  [<Fact>]
+  let ``Every succeeds`` () =
+    Assert.Equal ("every 3s", HxTrigger.Every "3s")
+
+  [<Fact>]
   let ``Filter.Alt succeeds`` () =
     Assert.Equal ("click[altKey]", HxTrigger.Filter.Alt HxTrigger.Click)
   
@@ -121,6 +179,147 @@ module Trigger =
   [<Fact>]
   let ``Filter.AltShift succeeds`` () =
     Assert.Equal ("click[altKey&&shiftKey]", HxTrigger.Filter.AltShift HxTrigger.Click)
+
+  [<Fact>]
+  let ``Once succeeds when it is the first modifier`` () =
+    Assert.Equal ("once", HxTrigger.Once "")
+    
+  [<Fact>]
+  let ``Once succeeds when it is not the first modifier`` () =
+    Assert.Equal ("click once", HxTrigger.Once "click")
+
+  [<Fact>]
+  let ``Changed succeeds when it is the first modifier`` () =
+    Assert.Equal ("changed", HxTrigger.Changed "")
+    
+  [<Fact>]
+  let ``Changed succeeds when it is not the first modifier`` () =
+    Assert.Equal ("click changed", HxTrigger.Changed "click")
+
+  [<Fact>]
+  let ``Delay succeeds when it is the first modifier`` () =
+    Assert.Equal ("delay:1s", HxTrigger.Delay "1s" "")
+    
+  [<Fact>]
+  let ``Delay succeeds when it is not the first modifier`` () =
+    Assert.Equal ("click delay:2s", HxTrigger.Delay "2s" "click")
+
+  [<Fact>]
+  let ``Throttle succeeds when it is the first modifier`` () =
+    Assert.Equal ("throttle:4s", HxTrigger.Throttle "4s" "")
+    
+  [<Fact>]
+  let ``Throttle succeeds when it is not the first modifier`` () =
+    Assert.Equal ("click throttle:7s", HxTrigger.Throttle "7s" "click")
+
+  [<Fact>]
+  let ``From succeeds when it is the first modifier`` () =
+    Assert.Equal ("from:.nav", HxTrigger.From ".nav" "")
+    
+  [<Fact>]
+  let ``From succeeds when it is not the first modifier`` () =
+    Assert.Equal ("click from:#somewhere", HxTrigger.From "#somewhere" "click")
+
+  [<Fact>]
+  let ``FromDocument succeeds when it is the first modifier`` () =
+    Assert.Equal ("from:document", HxTrigger.FromDocument "")
+    
+  [<Fact>]
+  let ``FromDocument succeeds when it is not the first modifier`` () =
+    Assert.Equal ("click from:document", HxTrigger.FromDocument "click")
+
+  [<Fact>]
+  let ``FromWindow succeeds when it is the first modifier`` () =
+    Assert.Equal ("from:window", HxTrigger.FromWindow "")
+    
+  [<Fact>]
+  let ``FromWindow succeeds when it is not the first modifier`` () =
+    Assert.Equal ("click from:window", HxTrigger.FromWindow "click")
+
+  [<Fact>]
+  let ``FromClosest succeeds when it is the first modifier`` () =
+    Assert.Equal ("from:closest div", HxTrigger.FromClosest "div" "")
+    
+  [<Fact>]
+  let ``FromClosest succeeds when it is not the first modifier`` () =
+    Assert.Equal ("click from:closest p", HxTrigger.FromClosest "p" "click")
+
+  [<Fact>]
+  let ``FromFind succeeds when it is the first modifier`` () =
+    Assert.Equal ("from:find li", HxTrigger.FromFind "li" "")
+    
+  [<Fact>]
+  let ``FromFind succeeds when it is not the first modifier`` () =
+    Assert.Equal ("click from:find .spot", HxTrigger.FromFind ".spot" "click")
+
+  [<Fact>]
+  let ``Target succeeds when it is the first modifier`` () =
+    Assert.Equal ("target:main", HxTrigger.Target "main" "")
+    
+  [<Fact>]
+  let ``Target succeeds when it is not the first modifier`` () =
+    Assert.Equal ("click target:footer", HxTrigger.Target "footer" "click")
+
+  [<Fact>]
+  let ``Consume succeeds when it is the first modifier`` () =
+    Assert.Equal ("consume", HxTrigger.Consume "")
+    
+  [<Fact>]
+  let ``Consume succeeds when it is not the first modifier`` () =
+    Assert.Equal ("click consume", HxTrigger.Consume "click")
+
+  [<Fact>]
+  let ``Queue succeeds when it is the first modifier`` () =
+    Assert.Equal ("queue:abc", HxTrigger.Queue "abc" "")
+    
+  [<Fact>]
+  let ``Queue succeeds when it is not the first modifier`` () =
+    Assert.Equal ("click queue:def", HxTrigger.Queue "def" "click")
+
+  [<Fact>]
+  let ``QueueFirst succeeds when it is the first modifier`` () =
+    Assert.Equal ("queue:first", HxTrigger.QueueFirst "")
+    
+  [<Fact>]
+  let ``QueueFirst succeeds when it is not the first modifier`` () =
+    Assert.Equal ("click queue:first", HxTrigger.QueueFirst "click")
+
+  [<Fact>]
+  let ``QueueLast succeeds when it is the first modifier`` () =
+    Assert.Equal ("queue:last", HxTrigger.QueueLast "")
+    
+  [<Fact>]
+  let ``QueueLast succeeds when it is not the first modifier`` () =
+    Assert.Equal ("click queue:last", HxTrigger.QueueLast "click")
+
+  [<Fact>]
+  let ``QueueAll succeeds when it is the first modifier`` () =
+    Assert.Equal ("queue:all", HxTrigger.QueueAll "")
+    
+  [<Fact>]
+  let ``QueueAll succeeds when it is not the first modifier`` () =
+    Assert.Equal ("click queue:all", HxTrigger.QueueAll "click")
+
+  [<Fact>]
+  let ``QueueNone succeeds when it is the first modifier`` () =
+    Assert.Equal ("queue:none", HxTrigger.QueueNone "")
+    
+  [<Fact>]
+  let ``QueueNone succeeds when it is not the first modifier`` () =
+    Assert.Equal ("click queue:none", HxTrigger.QueueNone "click")
+
+
+/// Tests for the HxVals module
+module Vals =
+  
+  [<Fact>]
+  let ``From succeeds with an empty list`` () =
+    Assert.Equal ("{  }", HxVals.From [])
+  
+  [<Fact>]
+  let ``From succeeds and escapes quotes`` () =
+    Assert.Equal ("{ \"test\": \"a \\\"b\\\" c\", \"2\": \"d e f\" }",
+                  HxVals.From [ "test", "a \"b\" c"; "2", "d e f" ])
 
 
 /// Tests for the HtmxAttrs module

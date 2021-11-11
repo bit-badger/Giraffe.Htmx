@@ -1,5 +1,13 @@
 ﻿module Giraffe.ViewEngine.Htmx
 
+/// Serialize a list of key/value pairs to JSON (very rudimentary)
+let private toJson (kvps : (string * string) list) =
+  kvps
+  |> List.map (fun kvp -> sprintf "\"%s\": \"%s\"" (fst kvp) ((snd kvp).Replace ("\"", "\\\"")))
+  |> String.concat ", "
+  |> sprintf "{ %s }"
+
+
 /// Valid values for the `hx-encoding` attribute
 [<RequireQualifiedAccess>]
 module HxEncoding =
@@ -8,7 +16,13 @@ module HxEncoding =
   /// A multipart form (used for file uploads)
   let MultipartForm = "multipart/form-data"
 
-// TODO: hx-header helper
+
+/// Helper to create the `hx-headers` attribute
+[<RequireQualifiedAccess>]
+module HxHeaders =
+  /// Create headers from a list of key/value pairs
+  let From = toJson
+
 
 /// Values / helpers for the `hx-params` attribute
 [<RequireQualifiedAccess>]
@@ -22,7 +36,25 @@ module HxParams =
   /// Exclude the specified parameters
   let Except fields = With fields |> sprintf "not %s"
 
-// TODO: hx-request helper
+
+/// Helpers to define `hx-request` attribute values
+[<RequireQualifiedAccess>]
+module HxRequest =
+  /// Convert a boolean to its lowercase string equivalent
+  let private toLowerBool (it : bool) =
+    (string it).ToLowerInvariant ()
+  /// Configure the request with various options
+  let Configure (opts : string list) =
+    opts
+    |> String.concat ", "
+    |> sprintf "{ %s }"
+  /// Set a timeout (in milliseconds)
+  let Timeout (ms : int) = $"\"timeout\": {ms}"
+  /// Include or exclude credentials from the request
+  let Credentials = toLowerBool >> sprintf "\"credentials\": %s"
+  /// Exclude or include headers from the request
+  let NoHeaders = toLowerBool >> sprintf "\"noHeaders\": %s"
+
 
 /// Valid values for the `hx-swap` attribute (may be combined with swap/settle/scroll/show config)
 [<RequireQualifiedAccess>]
@@ -42,6 +74,7 @@ module HxSwap =
   /// Does not append content from response (out of band items will still be processed).
   let None        = "none"
 
+
 /// Helpers for the `hx-trigger` attribute
 [<RequireQualifiedAccess>]
 module HxTrigger =
@@ -53,9 +86,13 @@ module HxTrigger =
         $"{parts.[0]}[{parts.[1]}&&{filter}]"
     | false -> $"{trigger}[{filter}]"
   /// Trigger the event on a click
-  let Click = "click"
+  let Click    = "click"
   /// Trigger the event on page load
-  let Load  = "load"
+  let Load     = "load"
+  /// Trigger the event when the item is visible
+  let Revealed = "revealed"
+  /// Trigger this event every [timing declaration]
+  let Every (duration : string) = $"every {duration}"
   /// Helpers for defining filters
   module Filter =
     /// Only trigger the event if the `ALT` key is pressed
@@ -72,10 +109,48 @@ module HxTrigger =
     let CtrlAltShift = CtrlAlt >> Shift
     /// Only trigger the event if `ALT+SHIFT` are pressed
     let AltShift     = Alt     >> Shift
-  
-  // TODO: more stuff for the hx-trigger helper
+  /// Append a modifier to the current trigger
+  let private appendModifier modifier current =
+    match current with "" -> modifier | _ -> $"{current} {modifier}"
+  /// Only trigger once
+  let Once = appendModifier "once"
+  /// Trigger when changed
+  let Changed = appendModifier "changed"
+  /// Delay execution; resets every time the event is seen
+  let Delay = sprintf "delay:%s" >> appendModifier
+  /// Throttle execution; ignore other events, fire when duration passes
+  let Throttle = sprintf "throttle:%s" >> appendModifier
+  /// Trigger this event from a CSS selector
+  let From = sprintf "from:%s" >> appendModifier
+  /// Trigger this event from the `document` object
+  let FromDocument = From "document"
+  /// Trigger this event from the `window` object
+  let FromWindow = From "window"
+  /// Trigger this event from the closest parent CSS selector
+  let FromClosest = sprintf "closest %s" >> From
+  /// Trigger this event from the closest child CSS selector
+  let FromFind = sprintf "find %s" >> From
+  /// Target the given CSS selector with the results of this event
+  let Target = sprintf "target:%s" >> appendModifier
+  /// Prevent any further events from occurring after this one fires
+  let Consume = appendModifier "consume"
+  /// Configure queueing when events fire when others are in flight; if unspecified, the default is "last"
+  let Queue = sprintf "queue:%s" >> appendModifier
+  /// Queue the first event, discard all others (i.e., a FIFO queue of 1)
+  let QueueFirst = Queue "first"
+  /// Queue the last event; discards current when another is received (i.e., a LIFO queue of 1)
+  let QueueLast = Queue "last"
+  /// Queue all events; discard none
+  let QueueAll = Queue "all"
+  /// Queue no events; discard all
+  let QueueNone = Queue "none"
 
-// TODO: hx-vals helper
+
+/// Helper to create the `hx-vals` attribute
+[<RequireQualifiedAccess>]
+module HxVals =
+  /// Create values from a list of key/value pairs
+  let From = toJson
 
 
 /// Attributes and flags for HTMX
