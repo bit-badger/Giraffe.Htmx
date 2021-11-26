@@ -74,6 +74,10 @@ module Handlers =
   let withHxRefresh : bool -> HttpHandler =
     toLowerBool >> setHttpHeader "HX-Refresh"
 
+  /// Allows you to override the `hx-target` attribute
+  let withHxRetarget : string -> HttpHandler =
+    setHttpHeader "HX-Retarget"
+
   /// Allows you to trigger a single client side event
   let withHxTrigger : string -> HttpHandler =
     setHttpHeader "HX-Trigger"

@@ -251,6 +251,17 @@ module HandlerTests =
       }
 
   [<Fact>]
+  let ``withHxRetarget succeeds`` () =
+    let ctx = Substitute.For<HttpContext> ()
+    let dic = HeaderDictionary ()
+    ctx.Response.Headers.ReturnsForAnyArgs dic |> ignore
+    task {
+      let! _ = withHxRetarget "#somewhereElse" next ctx
+      Assert.True (dic.ContainsKey "HX-Retarget")
+      Assert.Equal ("#somewhereElse", dic.["HX-Retarget"].[0])
+      }
+    
+  [<Fact>]
   let ``withHxTrigger succeeds`` () =
     let ctx = Substitute.For<HttpContext> ()
     let dic = HeaderDictionary ()
