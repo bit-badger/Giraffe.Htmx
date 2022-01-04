@@ -212,3 +212,23 @@ module HtmxAttrs =
   let _hxVals       = attr "hx-vals"
   /// Establishes a WebSocket or sends information to one
   let _hxWs         = attr "hx-ws"
+
+
+/// Script tags to pull htmx into an web page
+module Script =
+  
+  /// Script tag to load the minified version from unpkg.com
+  let minified =
+    script [
+      _src         "https://unpkg.com/htmx.org@1.6.1"
+      _integrity   "sha384-tvG/2mnCFmGQzYC1Oh3qxQ7CkQ9kMzYjWZSNtrRZygHPDDqottzEJsqS4oUVodhW"
+      _crossorigin "anonymous"
+      ] []
+
+  /// Script tag to load the unminified version from unpkg.com
+  let unminified =
+    script [
+      _src         "https://unpkg.com/htmx.org@1.6.1/dist/htmx.js"
+      _integrity   "sha384-7G9OE6gS4pBnBGH74HojjPQ8xOEGrdBeQc7JJOc58k6LG/YVfKXARd91w9715AYG"
+      _crossorigin "anonymous"
+      ] []
