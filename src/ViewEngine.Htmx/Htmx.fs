@@ -153,7 +153,7 @@ module HxVals =
   let From = toJson
 
 
-/// Attributes and flags for HTMX
+/// Attributes and flags for htmx
 [<AutoOpen>]
 module HtmxAttrs =
   /// Progressively enhances anchors and forms to use AJAX requests (use `_hxNoBoost` to set to false)

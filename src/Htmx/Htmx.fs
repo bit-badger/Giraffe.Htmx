@@ -39,10 +39,10 @@ type IHeaderDictionary with
 /// Extensions for the request object
 type HttpRequest with
 
-  /// Whether this request was initiated from HTMX
+  /// Whether this request was initiated from htmx
   member this.IsHtmx with get () = this.Headers.HxRequest |> Option.defaultValue false
 
-  /// Whether this request is an HTMX history-miss refresh request
+  /// Whether this request is an htmx history-miss refresh request
   member this.IsHtmxRefresh with get () =
     this.IsHtmx && (this.Headers.HxHistoryRestoreRequest |> Option.defaultValue false)
 
