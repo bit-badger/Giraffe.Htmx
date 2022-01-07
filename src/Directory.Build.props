@@ -2,7 +2,7 @@
 <Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
     <PropertyGroup>
         <VersionPrefix>1.6.1</VersionPrefix>
-        <PackageReleaseNotes>Add support for HX-Retarget header (added in htmx 1.6.1)</PackageReleaseNotes>
+        <PackageReleaseNotes>Initial production-ready release</PackageReleaseNotes>
         <Authors>danieljsummers</Authors>
         <Company>Bit Badger Solutions</Company>
         <PackageProjectUrl>https://github.com/bit-badger/Giraffe.Htmx</PackageProjectUrl>

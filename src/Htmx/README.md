@@ -2,6 +2,8 @@
 
 This package enables server-side support for [htmx](https://htmx.org) within [Giraffe](https://giraffe.wiki) and ASP.NET's `HttpContext`.
 
+**htmx version: 1.6.1**
+
 ### Setup
 
 1. Install the package.

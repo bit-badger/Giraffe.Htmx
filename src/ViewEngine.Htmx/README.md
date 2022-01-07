@@ -2,6 +2,8 @@
 
 This package enables [htmx](https://htmx.org) support within the [Giraffe](https://giraffe.wiki) view engine.
 
+**htmx version: 1.6.1**
+
 ### Setup
 
 1. Install the package.
@@ -24,6 +26,8 @@ Support modules include:
 - `HxSwap`
 - `HxTrigger`
 - `HxVals`
+
+There are two `XmlNode`s that will load the htmx script from unpkg; `Htmx.Script.minified` loads the minified version, and `Htmx.Script.unminified` loads the unminified version (useful for debugging).
 
 ### Learn
 

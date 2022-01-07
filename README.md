@@ -63,6 +63,8 @@ Some attributes have known values, such as `hx-trigger` and `hx-swap`; for these
       ]
 ```
 
+If you want to load htmx from unpkg, `Htmx.Script.minified` or `Htmx.Script.unminified` can be used to load the script in your HTML trees.
+
 ## Feedback / Help
 
 The author hangs out in the #htmx-general channel of the [htmx Discord server](https://htmx.org/discord) and the #web channel of the [F# Software Foundation's Slack server](https://fsharp.org/guides/slack/).
