@@ -164,6 +164,8 @@ module HtmxAttrs =
   let _hxDelete     = attr "hx-delete"
   /// Disables htmx processing for the given node and any children nodes
   let _hxDisable    = flag "hx-disable"
+  /// Disinherit all ("*") or specific htmx attributes
+  let _hxDisinherit = attr "hx-disinherit"
   /// Changes the request encoding type
   let _hxEncoding   = attr "hx-encoding"
   /// Extensions to use for this element
@@ -204,6 +206,8 @@ module HtmxAttrs =
   let _hxSwap       = attr "hx-swap"
   /// Marks content in a response as being "Out of Band", i.e. swapped somewhere other than the target
   let _hxSwapOob    = attr "hx-swap-oob"
+  /// Synchronize events based on another element
+  let _hxSync       = attr "hx-sync"
   /// Specifies the target element to be swapped
   let _hxTarget     = attr "hx-target"
   /// Specifies the event that triggers the request

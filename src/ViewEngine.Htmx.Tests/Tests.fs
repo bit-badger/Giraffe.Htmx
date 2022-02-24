@@ -345,6 +345,10 @@ module Attributes =
     p [ _hxDisable ] [] |> shouldRender """<p hx-disable></p>"""
   
   [<Fact>]
+  let ``_hxDisinherit succeeds`` () =
+    strong [ _hxDisinherit "*" ] [] |> shouldRender """<strong hx-disinherit="*"></strong>"""
+  
+  [<Fact>]
   let ``_hxEncoding succeeds`` () =
     form [ _hxEncoding "utf-7" ] [] |> shouldRender """<form hx-encoding="utf-7"></form>"""
   
@@ -425,6 +429,10 @@ module Attributes =
   let ``_hxSwapOob succeeds`` () =
     li [ _hxSwapOob "true" ] [] |> shouldRender """<li hx-swap-oob="true"></li>"""
   
+  [<Fact>]
+  let ``_hxSync succeeds`` () =
+    nav [ _hxSync "closest form:abort" ] [] |> shouldRender """<nav hx-sync="closest form:abort"></nav>"""
+
   [<Fact>]
   let ``_hxTarget succeeds`` () =
     header [ _hxTarget "#somewhereElse" ] [] |> shouldRender """<header hx-target="#somewhereElse"></header>"""

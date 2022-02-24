@@ -66,6 +66,10 @@ module Handlers =
   let withHxPush : string -> HttpHandler =
     setHttpHeader "HX-Push"
 
+  // Explicitly do not push a new URL into the history stack
+  let withHxNoPush : HttpHandler =
+    toLowerBool false |> withHxPush
+    
   /// Can be used to do a client-side redirect to a new location
   let withHxRedirect : string -> HttpHandler =
     setHttpHeader "HX-Redirect"
