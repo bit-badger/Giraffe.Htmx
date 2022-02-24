@@ -449,4 +449,19 @@ module Attributes =
   [<Fact>]
   let ``_hxWs succeeds`` () =
     ul [ _hxWs "connect:/web-socket" ] [] |> shouldRender """<ul hx-ws="connect:/web-socket"></ul>"""
+
+
+/// Tests for the Script module
+module Script =
   
+  [<Fact>]
+  let ``Script.minified succeeds`` () =
+    let html = RenderView.AsString.htmlNode Script.minified
+    Assert.Equal ("""<script src="https://unpkg.com/htmx.org@1.7.0" integrity="sha384-EzBXYPt0/T6gxNp0nuPtLkmRpmDBbjg6WmCUZRLXBBwYYmwAUxzlSGej0ARHX0Bo" crossorigin="anonymous"></script>""",
+                  html)
+  
+  [<Fact>]
+  let ``Script.unminified succeeds`` () =
+    let html = RenderView.AsString.htmlNode Script.unminified
+    Assert.Equal ("""<script src="https://unpkg.com/htmx.org@1.7.0/dist/htmx.js" integrity="sha384-ESk4PjE7dwjGkEciohREmmf8rLMX0E95MKwxM3bvC90sZ3XbF2TELnVk2w7bX0d9" crossorigin="anonymous"></script>""",
+                  html)
