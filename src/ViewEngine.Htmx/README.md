@@ -2,7 +2,7 @@
 
 This package enables [htmx](https://htmx.org) support within the [Giraffe](https://giraffe.wiki) view engine.
 
-**htmx version: 1.6.1**
+**htmx version: 1.7.0**
 
 ### Setup
 

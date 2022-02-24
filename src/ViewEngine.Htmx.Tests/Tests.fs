@@ -345,6 +345,10 @@ module Attributes =
     p [ _hxDisable ] [] |> shouldRender """<p hx-disable></p>"""
   
   [<Fact>]
+  let ``_hxDisinherit succeeds`` () =
+    strong [ _hxDisinherit "*" ] [] |> shouldRender """<strong hx-disinherit="*"></strong>"""
+  
+  [<Fact>]
   let ``_hxEncoding succeeds`` () =
     form [ _hxEncoding "utf-7" ] [] |> shouldRender """<form hx-encoding="utf-7"></form>"""
   
@@ -426,6 +430,10 @@ module Attributes =
     li [ _hxSwapOob "true" ] [] |> shouldRender """<li hx-swap-oob="true"></li>"""
   
   [<Fact>]
+  let ``_hxSync succeeds`` () =
+    nav [ _hxSync "closest form:abort" ] [] |> shouldRender """<nav hx-sync="closest form:abort"></nav>"""
+
+  [<Fact>]
   let ``_hxTarget succeeds`` () =
     header [ _hxTarget "#somewhereElse" ] [] |> shouldRender """<header hx-target="#somewhereElse"></header>"""
 
@@ -441,4 +449,19 @@ module Attributes =
   [<Fact>]
   let ``_hxWs succeeds`` () =
     ul [ _hxWs "connect:/web-socket" ] [] |> shouldRender """<ul hx-ws="connect:/web-socket"></ul>"""
+
+
+/// Tests for the Script module
+module Script =
   
+  [<Fact>]
+  let ``Script.minified succeeds`` () =
+    let html = RenderView.AsString.htmlNode Script.minified
+    Assert.Equal ("""<script src="https://unpkg.com/htmx.org@1.7.0" integrity="sha384-EzBXYPt0/T6gxNp0nuPtLkmRpmDBbjg6WmCUZRLXBBwYYmwAUxzlSGej0ARHX0Bo" crossorigin="anonymous"></script>""",
+                  html)
+  
+  [<Fact>]
+  let ``Script.unminified succeeds`` () =
+    let html = RenderView.AsString.htmlNode Script.unminified
+    Assert.Equal ("""<script src="https://unpkg.com/htmx.org@1.7.0/dist/htmx.js" integrity="sha384-ESk4PjE7dwjGkEciohREmmf8rLMX0E95MKwxM3bvC90sZ3XbF2TELnVk2w7bX0d9" crossorigin="anonymous"></script>""",
+                  html)

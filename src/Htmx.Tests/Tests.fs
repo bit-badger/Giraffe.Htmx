@@ -218,6 +218,17 @@ module HandlerTests =
       }
 
   [<Fact>]
+  let ``withHxNoPush succeeds`` () =
+    let ctx = Substitute.For<HttpContext> ()
+    let dic = HeaderDictionary ()
+    ctx.Response.Headers.ReturnsForAnyArgs dic |> ignore
+    task {
+      let! _ = withHxNoPush next ctx
+      Assert.True (dic.ContainsKey "HX-Push")
+      Assert.Equal ("false", dic.["HX-Push"].[0])
+      }
+
+  [<Fact>]
   let ``withHxRedirect succeeds`` () =
     let ctx = Substitute.For<HttpContext> ()
     let dic = HeaderDictionary ()
