@@ -284,6 +284,17 @@ module HandlerTests =
         }
 
     [<Fact>]
+    let ``withHxReswap succeeds`` () =
+        let ctx = Substitute.For<HttpContext> ()
+        let dic = HeaderDictionary ()
+        ctx.Response.Headers.ReturnsForAnyArgs dic |> ignore
+        task {
+            let! _ = withHxReswap HxSwap.BeforeEnd next ctx
+            Assert.True (dic.ContainsKey "HX-Reswap")
+            Assert.Equal (HxSwap.BeforeEnd, dic["HX-Reswap"][0])
+        }
+      
+    [<Fact>]
     let ``withHxRetarget succeeds`` () =
         let ctx = Substitute.For<HttpContext> ()
         let dic = HeaderDictionary ()

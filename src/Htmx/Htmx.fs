@@ -6,7 +6,7 @@ open System
 
 /// Determine if the given header is present
 let private hdr (headers : IHeaderDictionary) hdr =
-    match headers.[hdr] with it when it = StringValues.Empty -> None | it -> Some it[0]
+    match headers[hdr] with it when it = StringValues.Empty -> None | it -> Some it[0]
 
 /// Extensions to the header dictionary
 type IHeaderDictionary with
@@ -93,7 +93,11 @@ module Handlers =
     /// Explicitly do not replace the current URL in the history stack
     let withHxNoReplaceUrl : HttpHandler =
         toLowerBool false |> withHxReplaceUrl
-      
+    
+    /// Override the `hx-swap` attribute from the initiating element
+    let withHxReswap : string -> HttpHandler =
+        setHttpHeader "HX-Reswap"
+
     /// Allows you to override the `hx-target` attribute
     let withHxRetarget : string -> HttpHandler =
         setHttpHeader "HX-Retarget"

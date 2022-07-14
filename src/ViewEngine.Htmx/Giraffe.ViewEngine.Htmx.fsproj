@@ -15,4 +15,8 @@
     <PackageReference Include="Giraffe.ViewEngine" Version="1.4.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Common\Giraffe.Htmx.Common.fsproj" />
+  </ItemGroup>
+
 </Project>
