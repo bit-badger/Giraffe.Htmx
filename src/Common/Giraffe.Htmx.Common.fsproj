@@ -2,10 +2,13 @@
 
   <PropertyGroup>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <Description>Common definitions for Giraffe.Htmx</Description>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>
 
   <ItemGroup>
     <Compile Include="Common.fs" />
+    <None Include="README.md" Pack="true" PackagePath="\" />
   </ItemGroup>
 
 </Project>
