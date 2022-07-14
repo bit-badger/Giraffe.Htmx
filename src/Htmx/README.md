@@ -2,7 +2,7 @@
 
 This package enables server-side support for [htmx](https://htmx.org) within [Giraffe](https://giraffe.wiki) and ASP.NET's `HttpContext`.
 
-**htmx version: 1.7.0**
+**htmx version: 1.8.0**
 
 ### Setup
 
@@ -27,8 +27,10 @@ To set a response header:
   let myHandler : HttpHander =
     fun next ctx ->
       // some meaningful work
-      withHxPush "/some/new/url" >=> [other handlers]
+      withHxPushUrl "/some/new/url" >=> [other handlers]
 ```
+
+The `HxSwap` module has constants to use for the `HX-Reswap` header. These may be extended with settle, show, and other qualifiers; see the htmx documentation for the `hx-swap` attribute for more information.
 
 ### Learn
 

@@ -2,7 +2,7 @@
 
 This package enables [htmx](https://htmx.org) support within the [Giraffe](https://giraffe.wiki) view engine.
 
-**htmx version: 1.7.0**
+**htmx version: 1.8.0**
 
 ### Setup
 
@@ -23,7 +23,7 @@ Support modules include:
 - `HxHeaders`
 - `HxParams`
 - `HxRequest`
-- `HxSwap`
+- `HxSwap` (requires `open Giraffe.Htmx`)
 - `HxTrigger`
 - `HxVals`
 
