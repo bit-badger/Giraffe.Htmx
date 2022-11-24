@@ -29,6 +29,8 @@ Support modules include:
 
 There are two `XmlNode`s that will load the htmx script from unpkg; `Htmx.Script.minified` loads the minified version, and `Htmx.Script.unminified` loads the unminified version (useful for debugging).
 
+This also supports [fragment rendering](https://bitbadger.solutions/blog/2022/fragment-rendering-in-giraffe-view-engine.html), providing the flexibility to render an entire template, or only a portion of it (based on the element's `id` attribute).
+
 ### Learn
 
 htmx's attributes and these attribute functions map one-to-one. The lone exception is `_hxBoost`, which implies `true`; use `_hxNoBoost` to set it to `false`. The support modules contain named properties for known values (as illustrated with `HxTrigger.Load` above). A few of the modules are more than collections of names, though:

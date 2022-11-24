@@ -3,7 +3,7 @@
     <PropertyGroup>
         <TargetFramework>net6.0</TargetFramework>
         <VersionPrefix>1.8.4</VersionPrefix>
-        <PackageReleaseNotes>Support new attributes/headers in htmx 1.8.0</PackageReleaseNotes>
+        <PackageReleaseNotes>Support new hx-validate attribute in htmx 1.8.1; add support for fragment rendering</PackageReleaseNotes>
         <Authors>danieljsummers</Authors>
         <Company>Bit Badger Solutions</Company>
         <PackageProjectUrl>https://github.com/bit-badger/Giraffe.Htmx</PackageProjectUrl>
