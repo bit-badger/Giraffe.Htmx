@@ -434,12 +434,146 @@ module Script =
     let ``Script.minified succeeds`` () =
         let html = RenderView.AsString.htmlNode Script.minified
         Assert.Equal
-            ("""<script src="https://unpkg.com/htmx.org@1.8.0" integrity="sha384-cZuAZ+ZbwkNRnrKi05G/fjBX+azI9DNOkNYysZ0I/X5ZFgsmMiBXgDZof30F5ofc" crossorigin="anonymous"></script>""",
+            ("""<script src="https://unpkg.com/htmx.org@1.8.4" integrity="sha384-wg5Y/JwF7VxGk4zLsJEcAojRtlVp1FKKdGy1qN+OMtdq72WRvX/EdRdqg/LOhYeV" crossorigin="anonymous"></script>""",
              html)
 
     [<Fact>]
     let ``Script.unminified succeeds`` () =
         let html = RenderView.AsString.htmlNode Script.unminified
         Assert.Equal
-            ("""<script src="https://unpkg.com/htmx.org@1.8.0/dist/htmx.js" integrity="sha384-mrsv860ohrJ5KkqRxwXXj6OIT6sONUxOd+1kvbqW351hQd7JlfFnM0tLetA76GU0" crossorigin="anonymous"></script>""",
+            ("""<script src="https://unpkg.com/htmx.org@1.8.4/dist/htmx.js" integrity="sha384-sh63gh7zpjxu153RyKJ06Oy5HxIVl6cchze/dJOHulOI7u0sGZoC/CfQJHPODhFn" crossorigin="anonymous"></script>""",
              html)
+
+
+/// Tests for the RenderFragment module
+module RenderFragment =
+
+    open System.Text
+
+    [<Fact>]
+    let ``RenderFragment.findIdNode fails with a Text node`` () =
+        Assert.False (Option.isSome (RenderFragment.findIdNode "blue" (Text "")))
+
+    [<Fact>]
+    let ``RenderFragment.findIdNode fails with a VoidElement without a matching ID`` () =
+        Assert.False (Option.isSome (RenderFragment.findIdNode "purple" (br [ _id "mauve" ])))
+
+    [<Fact>]
+    let ``RenderFragment.findIdNode fails with a ParentNode with no children with a matching ID`` () =
+        Assert.False (Option.isSome (RenderFragment.findIdNode "green" (p [] [ str "howdy"; span [] [ str "huh" ] ])))
+    
+    [<Fact>]
+    let ``RenderFragment.findIdNode succeeds with a VoidElement with a matching ID`` () =
+        let leNode = hr [ _id "groovy" ]
+        let foundNode = RenderFragment.findIdNode "groovy" leNode
+        Assert.True (Option.isSome foundNode)
+        Assert.Same (leNode, foundNode.Value)
+    
+    [<Fact>]
+    let ``RenderFragment.findIdNode succeeds with a ParentNode with a child with a matching ID`` () =
+        let leNode = span [ _id "its-me" ] [ str "Mario" ]
+        let foundNode = RenderFragment.findIdNode "its-me" (p [] [ str "test"; str "again"; leNode; str "un mas" ])
+        Assert.True (Option.isSome foundNode)
+        Assert.Same (leNode, foundNode.Value)
+    
+    /// Generate a message if the requested ID node is not found
+    let private nodeNotFound (nodeId : string) =
+        $"<em>&ndash; ID {nodeId} not found &ndash;</em>"
+
+    /// Tests for the AsString module
+    module AsString =
+        
+        [<Fact>]
+        let ``RenderFragment.AsString.htmlFromNodes succeeds when an ID is matched`` () =
+            let html =
+                RenderFragment.AsString.htmlFromNodes "needle"
+                    [ p [] []; p [ _id "haystack" ] [ span [ _id "needle" ] [ str "ouch" ]; str "hay"; str "hay" ]]
+            Assert.Equal ("""<span id="needle">ouch</span>""", html)
+
+        [<Fact>]
+        let ``RenderFragment.AsString.htmlFromNodes fails when an ID is not matched`` () =
+            Assert.Equal (nodeNotFound "oops", RenderFragment.AsString.htmlFromNodes "oops" [])
+        
+        [<Fact>]
+        let ``RenderFragment.AsString.htmlFromNode succeeds when ID is matched at top level`` () =
+            let html = RenderFragment.AsString.htmlFromNode "wow" (p [ _id "wow" ] [ str "found it" ])
+            Assert.Equal ("""<p id="wow">found it</p>""", html)
+        
+        [<Fact>]
+        let ``RenderFragment.AsString.htmlFromNode succeeds when ID is matched in child element`` () =
+            let html =
+                div [] [ p [] [ str "not it" ]; p [ _id "hey" ] [ str "ta-da" ]]
+                |> RenderFragment.AsString.htmlFromNode "hey"
+            Assert.Equal ("""<p id="hey">ta-da</p>""", html)
+        
+        [<Fact>]
+        let ``RenderFragment.AsString.htmlFromNode fails when an ID is not matched`` () =
+            Assert.Equal (nodeNotFound "me", RenderFragment.AsString.htmlFromNode "me" (hr []))
+
+    /// Tests for the AsBytes module
+    module AsBytes =
+        
+        /// Alias for UTF-8 encoding
+        let private utf8 = Encoding.UTF8
+
+        [<Fact>]
+        let ``RenderFragment.AsBytes.htmlFromNodes succeeds when an ID is matched`` () =
+            let bytes =
+                RenderFragment.AsBytes.htmlFromNodes "found"
+                    [ p [] []; p [ _id "not-it" ] [ str "nope"; span [ _id "found" ] [ str "boo" ]; str "nope" ]]
+            Assert.Equal<byte> (utf8.GetBytes """<span id="found">boo</span>""", bytes)
+
+        [<Fact>]
+        let ``RenderFragment.AsBytes.htmlFromNodes fails when an ID is not matched`` () =
+            Assert.Equal<byte> (utf8.GetBytes (nodeNotFound "whiff"), RenderFragment.AsBytes.htmlFromNodes "whiff" [])
+        
+        [<Fact>]
+        let ``RenderFragment.AsBytes.htmlFromNode succeeds when ID is matched at top level`` () =
+            let bytes = RenderFragment.AsBytes.htmlFromNode "first" (p [ _id "first" ] [ str "!!!" ])
+            Assert.Equal<byte> (utf8.GetBytes """<p id="first">!!!</p>""", bytes)
+        
+        [<Fact>]
+        let ``RenderFragment.AsBytes.htmlFromNode succeeds when ID is matched in child element`` () =
+            let bytes =
+                div [] [ p [] [ str "not me" ]; p [ _id "child" ] [ str "node" ]]
+                |> RenderFragment.AsBytes.htmlFromNode "child"
+            Assert.Equal<byte> (utf8.GetBytes """<p id="child">node</p>""", bytes)
+        
+        [<Fact>]
+        let ``RenderFragment.AsBytes.htmlFromNode fails when an ID is not matched`` () =
+            Assert.Equal<byte> (utf8.GetBytes (nodeNotFound "foo"), RenderFragment.AsBytes.htmlFromNode "foo" (hr []))
+
+    /// Tests for the IntoStringBuilder module
+    module IntoStringBuilder =
+        
+        [<Fact>]
+        let ``RenderFragment.IntoStringBuilder.htmlFromNodes succeeds when an ID is matched`` () =
+            let sb = StringBuilder ()
+            RenderFragment.IntoStringBuilder.htmlFromNodes sb "find-me"
+                [ p [] []; p [ _id "peekaboo" ] [ str "bzz"; str "nope"; span [ _id "find-me" ] [ str ";)" ] ]]
+            Assert.Equal ("""<span id="find-me">;)</span>""", string sb)
+
+        [<Fact>]
+        let ``RenderFragment.IntoStringBuilder.htmlFromNodes fails when an ID is not matched`` () =
+            let sb = StringBuilder ()
+            RenderFragment.IntoStringBuilder.htmlFromNodes sb "missing" []
+            Assert.Equal (nodeNotFound "missing", string sb)
+        
+        [<Fact>]
+        let ``RenderFragment.IntoStringBuilder.htmlFromNode succeeds when ID is matched at top level`` () =
+            let sb = StringBuilder ()
+            RenderFragment.IntoStringBuilder.htmlFromNode sb "top" (p [ _id "top" ] [ str "pinnacle" ])
+            Assert.Equal ("""<p id="top">pinnacle</p>""", string sb)
+        
+        [<Fact>]
+        let ``RenderFragment.IntoStringBuilder.htmlFromNode succeeds when ID is matched in child element`` () =
+            let sb = StringBuilder ()
+            div [] [ p [] [ str "nada" ]; p [ _id "it" ] [ str "is here" ]]
+            |> RenderFragment.IntoStringBuilder.htmlFromNode sb "it"
+            Assert.Equal ("""<p id="it">is here</p>""", string sb)
+        
+        [<Fact>]
+        let ``RenderFragment.IntoStringBuilder.htmlFromNode fails when an ID is not matched`` () =
+            let sb = StringBuilder ()
+            RenderFragment.IntoStringBuilder.htmlFromNode sb "bar" (hr [])
+            Assert.Equal (nodeNotFound "bar", string sb)

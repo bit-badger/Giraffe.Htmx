@@ -1,4 +1,4 @@
-﻿module Giraffe.ViewEngine.Htmx
+module Giraffe.ViewEngine.Htmx
 
 /// Serialize a list of key/value pairs to JSON (very rudimentary)
 let private toJson (kvps : (string * string) list) =
@@ -271,6 +271,9 @@ module HtmxAttrs =
     /// Specifies the event that triggers the request
     let _hxTrigger    = attr "hx-trigger"
     
+    /// Validate an input element (uses HTML5 validation API)
+    let _hxValidate   = flag "hx-validate"
+    
     /// Adds to the parameters that will be submitted with the request
     let _hxVals       = attr "hx-vals"
     
@@ -283,12 +286,87 @@ module Script =
   
     /// Script tag to load the minified version from unpkg.com
     let minified =
-        script [ _src         "https://unpkg.com/htmx.org@1.8.0"
-                 _integrity   "sha384-cZuAZ+ZbwkNRnrKi05G/fjBX+azI9DNOkNYysZ0I/X5ZFgsmMiBXgDZof30F5ofc"
+        script [ _src         "https://unpkg.com/htmx.org@1.8.4"
+                 _integrity   "sha384-wg5Y/JwF7VxGk4zLsJEcAojRtlVp1FKKdGy1qN+OMtdq72WRvX/EdRdqg/LOhYeV"
                  _crossorigin "anonymous" ] []
 
     /// Script tag to load the unminified version from unpkg.com
     let unminified =
-        script [ _src         "https://unpkg.com/htmx.org@1.8.0/dist/htmx.js"
-                 _integrity   "sha384-mrsv860ohrJ5KkqRxwXXj6OIT6sONUxOd+1kvbqW351hQd7JlfFnM0tLetA76GU0"
+        script [ _src         "https://unpkg.com/htmx.org@1.8.4/dist/htmx.js"
+                 _integrity   "sha384-sh63gh7zpjxu153RyKJ06Oy5HxIVl6cchze/dJOHulOI7u0sGZoC/CfQJHPODhFn"
                  _crossorigin "anonymous" ] []
+
+
+/// Functions to extract and render an HTML fragment from a document
+[<RequireQualifiedAccess>]
+module RenderFragment =
+    
+    /// Does this element have an ID matching the requested ID name?
+    let private isIdElement nodeId (elt : XmlElement) =
+        snd elt
+        |> Array.exists (fun attr ->
+            match attr with
+            | KeyValue (name, value) -> name = "id" && value = nodeId
+            | Boolean _ -> false)
+
+    /// Generate a message if the requested ID node is not found
+    let private nodeNotFound (nodeId : string) =
+        $"<em>&ndash; ID {nodeId} not found &ndash;</em>"
+    
+    /// Find the node with the named ID
+    let rec findIdNode nodeId (node : XmlNode) : XmlNode option =
+        match node with
+        | Text _ -> None
+        | VoidElement elt -> if isIdElement nodeId elt then Some node else None
+        | ParentNode (elt, children) ->
+            if isIdElement nodeId elt then Some node else children |> List.tryPick (fun c -> findIdNode nodeId c)
+    
+    /// Functions to render a fragment as a string
+    [<RequireQualifiedAccess>]
+    module AsString =
+
+        /// Render to HTML for the given ID
+        let htmlFromNodes nodeId (nodes : XmlNode list) =
+            match nodes |> List.tryPick(fun node -> findIdNode nodeId node) with
+            | Some idNode -> RenderView.AsString.htmlNode idNode
+            | None -> nodeNotFound nodeId
+
+        /// Render to HTML for the given ID
+        let htmlFromNode nodeId node =
+            match findIdNode nodeId node with
+            | Some idNode -> RenderView.AsString.htmlNode idNode
+            | None -> nodeNotFound nodeId
+
+    /// Functions to render a fragment as bytes
+    [<RequireQualifiedAccess>]
+    module AsBytes =
+
+        let private utf8 = System.Text.Encoding.UTF8
+
+        /// Render to HTML for the given ID
+        let htmlFromNodes nodeId (nodes : XmlNode list) =
+            match nodes |> List.tryPick(fun node -> findIdNode nodeId node) with
+            | Some idNode -> RenderView.AsBytes.htmlNode idNode
+            | None -> nodeNotFound nodeId |> utf8.GetBytes
+
+        /// Render to HTML for the given ID
+        let htmlFromNode nodeId node =
+            match findIdNode nodeId node with
+            | Some idNode -> RenderView.AsBytes.htmlNode idNode
+            | None -> nodeNotFound nodeId |> utf8.GetBytes
+
+    /// Functions to render a fragment into a StringBuilder
+    [<RequireQualifiedAccess>]
+    module IntoStringBuilder =
+
+        /// Render to HTML for the given ID
+        let htmlFromNodes sb nodeId (nodes : XmlNode list) =
+            match nodes |> List.tryPick(fun node -> findIdNode nodeId node) with
+            | Some idNode -> RenderView.IntoStringBuilder.htmlNode sb idNode
+            | None -> nodeNotFound nodeId |> sb.Append |> ignore
+
+        /// Render to HTML for the given ID
+        let htmlFromNode sb nodeId node =
+            match findIdNode nodeId node with
+            | Some idNode -> RenderView.IntoStringBuilder.htmlNode sb idNode
+            | None -> nodeNotFound nodeId |> sb.Append |> ignore
