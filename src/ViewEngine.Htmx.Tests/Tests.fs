@@ -334,6 +334,10 @@ module Attributes =
         |> shouldRender """<figure hx-headers="{ &quot;X-Special-Header&quot;: &quot;some-header&quot; }"></figure>"""
 
     [<Fact>]
+    let ``_hxHistory succeeds`` () =
+        span [ _hxHistory "false" ] [] |> shouldRender """<span hx-history="false"></span>"""
+    
+    [<Fact>]
     let ``_hxHistoryElt succeeds`` () =
         table [ _hxHistoryElt ] [] |> shouldRender """<table hx-history-elt></table>"""
 
@@ -434,14 +438,14 @@ module Script =
     let ``Script.minified succeeds`` () =
         let html = RenderView.AsString.htmlNode Script.minified
         Assert.Equal
-            ("""<script src="https://unpkg.com/htmx.org@1.8.4" integrity="sha384-wg5Y/JwF7VxGk4zLsJEcAojRtlVp1FKKdGy1qN+OMtdq72WRvX/EdRdqg/LOhYeV" crossorigin="anonymous"></script>""",
+            ("""<script src="https://unpkg.com/htmx.org@1.8.5" integrity="sha384-7aHh9lqPYGYZ7sTHvzP1t3BAfLhYSTy9ArHdP3Xsr9/3TlGurYgcPBoFmXX2TX/w" crossorigin="anonymous"></script>""",
              html)
 
     [<Fact>]
     let ``Script.unminified succeeds`` () =
         let html = RenderView.AsString.htmlNode Script.unminified
         Assert.Equal
-            ("""<script src="https://unpkg.com/htmx.org@1.8.4/dist/htmx.js" integrity="sha384-sh63gh7zpjxu153RyKJ06Oy5HxIVl6cchze/dJOHulOI7u0sGZoC/CfQJHPODhFn" crossorigin="anonymous"></script>""",
+            ("""<script src="https://unpkg.com/htmx.org@1.8.5/dist/htmx.js" integrity="sha384-VgGOQitu5eD5qAdh1QPLvPeTt1X4/Iw9B2sfYw+p3xtTumxaRv+onip7FX+P6q30" crossorigin="anonymous"></script>""",
              html)
 
 

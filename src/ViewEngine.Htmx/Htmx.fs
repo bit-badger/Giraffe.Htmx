@@ -208,6 +208,9 @@ module HtmxAttrs =
     /// Adds to the headers that will be submitted with the request
     let _hxHeaders    = attr "hx-headers"
     
+    /// Set to "false" to prevent pages with sensitive information from being stored in the history cache
+    let _hxHistory    = attr "hx-history"
+    
     /// The element to snapshot and restore during history navigation
     let _hxHistoryElt = flag "hx-history-elt"
     
@@ -286,14 +289,14 @@ module Script =
   
     /// Script tag to load the minified version from unpkg.com
     let minified =
-        script [ _src         "https://unpkg.com/htmx.org@1.8.4"
-                 _integrity   "sha384-wg5Y/JwF7VxGk4zLsJEcAojRtlVp1FKKdGy1qN+OMtdq72WRvX/EdRdqg/LOhYeV"
+        script [ _src         "https://unpkg.com/htmx.org@1.8.5"
+                 _integrity   "sha384-7aHh9lqPYGYZ7sTHvzP1t3BAfLhYSTy9ArHdP3Xsr9/3TlGurYgcPBoFmXX2TX/w"
                  _crossorigin "anonymous" ] []
 
     /// Script tag to load the unminified version from unpkg.com
     let unminified =
-        script [ _src         "https://unpkg.com/htmx.org@1.8.4/dist/htmx.js"
-                 _integrity   "sha384-sh63gh7zpjxu153RyKJ06Oy5HxIVl6cchze/dJOHulOI7u0sGZoC/CfQJHPODhFn"
+        script [ _src         "https://unpkg.com/htmx.org@1.8.5/dist/htmx.js"
+                 _integrity   "sha384-VgGOQitu5eD5qAdh1QPLvPeTt1X4/Iw9B2sfYw+p3xtTumxaRv+onip7FX+P6q30"
                  _crossorigin "anonymous" ] []
 
 
