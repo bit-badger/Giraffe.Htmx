@@ -1,0 +1,25 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="Common.fs" />
+    <Compile Include="Htmx.fs" />
+    <Compile Include="ViewEngine.fs" />
+    <Compile Include="Program.fs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Common\Giraffe.Htmx.Common.fsproj" />
+    <ProjectReference Include="..\Htmx\Giraffe.Htmx.fsproj" />
+    <ProjectReference Include="..\ViewEngine.Htmx\Giraffe.ViewEngine.Htmx.fsproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Expecto" Version="9.0.4" />
+    <PackageReference Include="NSubstitute" Version="5.0.0" />
+  </ItemGroup>
+
+</Project>
