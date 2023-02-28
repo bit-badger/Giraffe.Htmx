@@ -5,6 +5,7 @@ on:
     branches: [ "1.8.5.vnext" ]
   pull_request:
     branches: [ "1.8.5.vnext" ]
+  workflow_dispatch:
 
 jobs:
   build-and-test:
