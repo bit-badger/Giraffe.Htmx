@@ -25,7 +25,7 @@ jobs:
       run: dotnet restore src/Giraffe.Htmx.sln
     - name: Build
       run: dotnet build src/Giraffe.Htmx.sln --no-restore
-    - name: Test ${{ matrix.dotnet-version }} against PostgreSQL ${{ matrix.postgres-version }}
+    - name: Test (.NET ${{ matrix.dotnet-version }})
       run: dotnet run --project src/Tests/Tests.fsproj -f net${{ matrix.dotnet-version }}
   publish:
     runs-on: ubuntu-latest
