@@ -2,9 +2,9 @@ name: CI
 
 on:
   push:
-    branches: [ "1.8.5.vnext" ]
+    branches: [ "main" ]
   pull_request:
-    branches: [ "1.8.5.vnext" ]
+    branches: [ "main" ]
 
 jobs:
   build-and-test:
