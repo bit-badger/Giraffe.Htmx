@@ -2,233 +2,295 @@ module ViewEngine
 
 open Expecto
 open Giraffe.ViewEngine
+open Giraffe.ViewEngine.Htmx
 
 /// Tests for the HxEncoding module
 let hxEncoding =
-    testList "Encoding" [
+    testList "HxEncoding" [
         test "Form is correct" {
-            Expect.equal ("application/x-www-form-urlencoded", HxEncoding.Form)
+            Expect.equal HxEncoding.Form "application/x-www-form-urlencoded" "Form encoding not correct"
         }
         test "MultipartForm is correct" {
-            Expect.equal ("multipart/form-data", HxEncoding.MultipartForm)
+            Expect.equal HxEncoding.MultipartForm "multipart/form-data" "Multipart form encoding not correct"
         }
     ]
 
 /// Tests for the HxHeaders module
 let hxHeaders =
-    testList "Headers" [
-        test "From succeeds with an empty list" {
-            Expect.equal ("{  }", HxHeaders.From [])
-        }
-        test "From succeeds and escapes quotes" {
-            Expect.equal ("{ \"test\": \"one two three\", \"again\": \"four \\\"five\\\" six\" }",
-                         HxHeaders.From [ "test", "one two three"; "again", "four \"five\" six" ])
-        }
+    testList "HxHeaders" [
+        testList "From" [
+            test "succeeds with an empty list" {
+                Expect.equal (HxHeaders.From []) "{  }" "Empty headers not correct"
+            }
+            test "succeeds and escapes quotes" {
+                Expect.equal
+                    (HxHeaders.From [ "test", "one two three"; "again", """four "five" six""" ])
+                    """{ "test": "one two three", "again": "four \"five\" six" }""" "Headers not correct"
+            }
+        ]
     ]
 
 /// Tests for the HxParams module
 let hxParams =
-    testList "Params" [
+    testList "HxParams" [
         test "All is correct" {
-            Expect.equal ("*", HxParams.All)
+            Expect.equal HxParams.All "*" "All is not correct"
         }
         test "None is correct" {
-            Expect.equal ("none", HxParams.None)
+            Expect.equal HxParams.None "none" "None is not correct"
         }
-        test "With succeeds with empty list" {
-            Expect.equal ("", HxParams.With [])
-        }
-        test "With succeeds with one list item" {
-            Expect.equal ("boo", HxParams.With [ "boo" ])
-        }
-        test "With succeeds with multiple list items" {
-            Expect.equal ("foo,bar,baz", HxParams.With [ "foo"; "bar"; "baz" ])
-        }
-        test "Except succeeds with empty list" {
-            Expect.equal ("not ", HxParams.Except [])
-        }
-        test "Except succeeds with one list item" {
-            Expect.equal ("not that", HxParams.Except [ "that" ])
-        }
-        test "Except succeeds with multiple list items" {
-            Expect.equal ("not blue,green", HxParams.Except [ "blue"; "green" ])
-        }
+        testList "With" [
+            test "succeeds with empty list" {
+                Expect.equal (HxParams.With []) "" "With with empty list should have been blank"
+            }
+            test "succeeds with one list item" {
+                Expect.equal (HxParams.With [ "boo" ]) "boo" "With single item incorrect"
+            }
+            test "succeeds with multiple list items" {
+                Expect.equal (HxParams.With [ "foo"; "bar"; "baz" ]) "foo,bar,baz" "With multiple items incorrect"
+            }
+        ]
+        testList "Except" [
+            test "succeeds with empty list" {
+                Expect.equal (HxParams.Except []) "not " "Except with empty list incorrect"
+            }
+            test "succeeds with one list item" {
+                Expect.equal (HxParams.Except [ "that" ]) "not that" "Except single item incorrect"
+            }
+            test "succeeds with multiple list items" {
+                Expect.equal (HxParams.Except [ "blue"; "green" ]) "not blue,green" "Except multiple items incorrect"
+            }
+        ]
     ]
 
 /// Tests for the HxRequest module
 let hxRequest =
-    testList "Request" [
-        test "Configure succeeds with an empty list" {
-            Expect.equal ("{  }", HxRequest.Configure [])
-        }
-        test "Configure succeeds with a non-empty list" {
-            Expect.equal ("{ \"a\": \"b\", \"c\": \"d\" }", HxRequest.Configure [ "\"a\": \"b\""; "\"c\": \"d\"" ])
-        }
-        test "Configure succeeds with all known params configured" {
-            Expect.equal ("{ \"timeout\": 1000, \"credentials\": false, \"noHeaders\": true }",
-                        HxRequest.Configure [ HxRequest.Timeout 1000; HxRequest.Credentials false; HxRequest.NoHeaders true ])
-        }
+    testList "HxRequest" [
+        testList "Configure" [
+            test "succeeds with an empty list" {
+                Expect.equal (HxRequest.Configure []) "{  }" "Configure with empty list incorrect"
+            }
+            test "succeeds with a non-empty list" {
+                Expect.equal
+                    (HxRequest.Configure [ "\"a\": \"b\""; "\"c\": \"d\"" ]) """{ "a": "b", "c": "d" }"""
+                    "Configure with a non-empty list incorrect"
+            }
+            test "succeeds with all known params configured" {
+                Expect.equal
+                    (HxRequest.Configure
+                        [ HxRequest.Timeout 1000; HxRequest.Credentials false; HxRequest.NoHeaders true ])
+                    """{ "timeout": 1000, "credentials": false, "noHeaders": true }"""
+                    "Configure with all known params incorrect"
+            }
+        ]
         test "Timeout succeeds" {
-            Expect.equal ("\"timeout\": 50", HxRequest.Timeout 50)
+            Expect.equal (HxRequest.Timeout 50) "\"timeout\": 50" "Timeout value incorrect"
         }
-        test "Credentials succeeds when set to true" {
-            Expect.equal ("\"credentials\": true", HxRequest.Credentials true)
-        }
-        test "Credentials succeeds when set to false" {
-            Expect.equal ("\"credentials\": false", HxRequest.Credentials false)
-        }
-        test "NoHeaders succeeds when set to true" {
-            Expect.equal ("\"noHeaders\": true", HxRequest.NoHeaders true)
-        }
-        test "NoHeaders succeeds when set to false" {
-            Expect.equal ("\"noHeaders\": false", HxRequest.NoHeaders false)
-        }
+        testList "Credentials" [
+            test "succeeds when set to true" {
+                Expect.equal (HxRequest.Credentials true) "\"credentials\": true" "Credentials value incorrect"
+            }
+            test "succeeds when set to false" {
+                Expect.equal (HxRequest.Credentials false) "\"credentials\": false" "Credentials value incorrect"
+            }
+        ]
+        testList "NoHeaders" [
+            test "succeeds when set to true" {
+                Expect.equal (HxRequest.NoHeaders true) "\"noHeaders\": true" "NoHeaders value incorrect"
+            }
+            test "succeeds when set to false" {
+                Expect.equal (HxRequest.NoHeaders false) "\"noHeaders\": false" "NoHeaders value incorrect"
+            }
+        ]
     ]
 
 /// Tests for the HxTrigger module
 let hxTrigger =
-    testList "Trigger" [
+    testList "HxTrigger" [
         test "Click is correct" {
-            Expect.equal ("click", HxTrigger.Click)
+            Expect.equal HxTrigger.Click "click" "Click is incorrect"
         }
         test "Load is correct" {
-            Expect.equal ("load", HxTrigger.Load)
+            Expect.equal HxTrigger.Load "load" "Load is incorrect"
         }
         test "Revealed is correct" {
-            Expect.equal ("revealed", HxTrigger.Revealed)
+            Expect.equal HxTrigger.Revealed "revealed" "Revealed is incorrect"
         }
         test "Every succeeds" {
-            Expect.equal ("every 3s", HxTrigger.Every "3s")
+            Expect.equal (HxTrigger.Every "3s") "every 3s" "Every is incorrect"
         }
-        test "Filter.Alt succeeds" {
-            Expect.equal ("click[altKey]", HxTrigger.Filter.Alt HxTrigger.Click)
-        }
-        test "Filter.Ctrl succeeds" {
-            Expect.equal ("click[ctrlKey]", HxTrigger.Filter.Ctrl HxTrigger.Click)
-        }
-        test "Filter.Shift succeeds" {
-            Expect.equal ("click[shiftKey]", HxTrigger.Filter.Shift HxTrigger.Click)
-        }
-        test "Filter.CtrlAlt succeeds" {
-            Expect.equal ("click[ctrlKey&&altKey]", HxTrigger.Filter.CtrlAlt HxTrigger.Click)
-        }
-        test "Filter.CtrlShift succeeds" {
-            Expect.equal ("click[ctrlKey&&shiftKey]", HxTrigger.Filter.CtrlShift HxTrigger.Click)
-        }
-        test "Filter.CtrlAltShift succeeds" {
-            Expect.equal ("click[ctrlKey&&altKey&&shiftKey]", HxTrigger.Filter.CtrlAltShift HxTrigger.Click)
-        }
-        test "Filter.AltShift succeeds" {
-            Expect.equal ("click[altKey&&shiftKey]", HxTrigger.Filter.AltShift HxTrigger.Click)
-        }
-        test "Once succeeds when it is the first modifier" {
-            Expect.equal ("once", HxTrigger.Once "")
-        }
-        test "Once succeeds when it is not the first modifier" {
-            Expect.equal ("click once", HxTrigger.Once "click")
-        }
-        test "Changed succeeds when it is the first modifier" {
-            Expect.equal ("changed", HxTrigger.Changed "")
-        }
-        test "Changed succeeds when it is not the first modifier" {
-            Expect.equal ("click changed", HxTrigger.Changed "click")
-        }
-        test "Delay succeeds when it is the first modifier" {
-            Expect.equal ("delay:1s", HxTrigger.Delay "1s" "")
-        }
-        test "Delay succeeds when it is not the first modifier" {
-            Expect.equal ("click delay:2s", HxTrigger.Delay "2s" "click")
-        }
-        test "Throttle succeeds when it is the first modifier" {
-            Expect.equal ("throttle:4s", HxTrigger.Throttle "4s" "")
-        }
-        test "Throttle succeeds when it is not the first modifier" {
-            Expect.equal ("click throttle:7s", HxTrigger.Throttle "7s" "click")
-        }
-        test "From succeeds when it is the first modifier" {
-            Expect.equal ("from:.nav", HxTrigger.From ".nav" "")
-        }
-        test "From succeeds when it is not the first modifier" {
-            Expect.equal ("click from:#somewhere", HxTrigger.From "#somewhere" "click")
-        }
-        test "FromDocument succeeds when it is the first modifier" {
-            Expect.equal ("from:document", HxTrigger.FromDocument "")
-        } 
-        test "FromDocument succeeds when it is not the first modifier" {
-            Expect.equal ("click from:document", HxTrigger.FromDocument "click")
-        }
-        test "FromWindow succeeds when it is the first modifier" {
-            Expect.equal ("from:window", HxTrigger.FromWindow "")
-        }
-        test "FromWindow succeeds when it is not the first modifier" {
-            Expect.equal ("click from:window", HxTrigger.FromWindow "click")
-        }
-        test "FromClosest succeeds when it is the first modifier" {
-            Expect.equal ("from:closest div", HxTrigger.FromClosest "div" "")
-        }
-        test "FromClosest succeeds when it is not the first modifier" {
-            Expect.equal ("click from:closest p", HxTrigger.FromClosest "p" "click")
-        }
-        test "FromFind succeeds when it is the first modifier" {
-            Expect.equal ("from:find li", HxTrigger.FromFind "li" "")
-        }
-        test "FromFind succeeds when it is not the first modifier" {
-            Expect.equal ("click from:find .spot", HxTrigger.FromFind ".spot" "click")
-        }
-        test "Target succeeds when it is the first modifier" {
-            Expect.equal ("target:main", HxTrigger.Target "main" "")
-        }
-        test "Target succeeds when it is not the first modifier" {
-            Expect.equal ("click target:footer", HxTrigger.Target "footer" "click")
-        }
-        test "Consume succeeds when it is the first modifier" {
-            Expect.equal ("consume", HxTrigger.Consume "")
-        }
-        test "Consume succeeds when it is not the first modifier" {
-            Expect.equal ("click consume", HxTrigger.Consume "click")
-        }
-        test "Queue succeeds when it is the first modifier" {
-            Expect.equal ("queue:abc", HxTrigger.Queue "abc" "")
-        }
-        test "Queue succeeds when it is not the first modifier" {
-            Expect.equal ("click queue:def", HxTrigger.Queue "def" "click")
-        }
-        test "QueueFirst succeeds when it is the first modifier" {
-            Expect.equal ("queue:first", HxTrigger.QueueFirst "")
-        }
-        test "QueueFirst succeeds when it is not the first modifier" {
-            Expect.equal ("click queue:first", HxTrigger.QueueFirst "click")
-        }
-        test "QueueLast succeeds when it is the first modifier" {
-            Expect.equal ("queue:last", HxTrigger.QueueLast "")
-        }
-        test "QueueLast succeeds when it is not the first modifier" {
-            Expect.equal ("click queue:last", HxTrigger.QueueLast "click")
-        }
-        test "QueueAll succeeds when it is the first modifier" {
-            Expect.equal ("queue:all", HxTrigger.QueueAll "")
-        }
-        test "QueueAll succeeds when it is not the first modifier" {
-            Expect.equal ("click queue:all", HxTrigger.QueueAll "click")
-        }
-        test "QueueNone succeeds when it is the first modifier" {
-            Expect.equal ("queue:none", HxTrigger.QueueNone "")
-        }
-        test "QueueNone succeeds when it is not the first modifier" {
-            Expect.equal ("click queue:none", HxTrigger.QueueNone "click")
-        }
+        testList "Filter" [
+            test "Alt succeeds" {
+                Expect.equal (HxTrigger.Filter.Alt HxTrigger.Click) "click[altKey]" "Alt filter incorrect"
+            }
+            test "Ctrl succeeds" {
+                Expect.equal (HxTrigger.Filter.Ctrl HxTrigger.Click) "click[ctrlKey]" "Ctrl filter incorrect"
+            }
+            test "Shift succeeds" {
+                Expect.equal (HxTrigger.Filter.Shift HxTrigger.Click) "click[shiftKey]" "Shift filter incorrect"
+            }
+            test "CtrlAlt succeeds" {
+                Expect.equal
+                    (HxTrigger.Filter.CtrlAlt HxTrigger.Click) "click[ctrlKey&&altKey]" "Ctrl+Alt filter incorrect"
+            }
+            test "CtrlShift succeeds" {
+                Expect.equal
+                    (HxTrigger.Filter.CtrlShift HxTrigger.Click) "click[ctrlKey&&shiftKey]"
+                    "Ctrl+Shift filter incorrect"
+            }
+            test "CtrlAltShift succeeds" {
+                Expect.equal
+                    (HxTrigger.Filter.CtrlAltShift HxTrigger.Click) "click[ctrlKey&&altKey&&shiftKey]"
+                    "Ctrl+Alt+Shift filter incorrect"
+            }
+            test "AltShift succeeds" {
+                Expect.equal
+                    (HxTrigger.Filter.AltShift HxTrigger.Click) "click[altKey&&shiftKey]" "Alt+Shift filter incorrect"
+            }
+        ]
+        testList "Once" [
+            test "succeeds when it is the first modifier" {
+                Expect.equal (HxTrigger.Once "") "once" "Once modifier incorrect"
+            }
+            test "succeeds when it is not the first modifier" {
+                Expect.equal (HxTrigger.Once "click") "click once" "Once modifier incorrect"
+            }
+        ]
+        testList "Changed" [
+            test "succeeds when it is the first modifier" {
+                Expect.equal (HxTrigger.Changed "") "changed" "Changed modifier incorrect"
+            }
+            test "succeeds when it is not the first modifier" {
+                Expect.equal (HxTrigger.Changed "click") "click changed" "Changed modifier incorrect"
+            }
+        ]
+        testList "Delay" [
+            test "succeeds when it is the first modifier" {
+                Expect.equal (HxTrigger.Delay "1s" "") "delay:1s" "Delay modifier incorrect"
+            }
+            test "succeeds when it is not the first modifier" {
+                Expect.equal (HxTrigger.Delay "2s" "click") "click delay:2s" "Delay modifier incorrect"
+            }
+        ]
+        testList "Throttle" [
+            test "succeeds when it is the first modifier" {
+                Expect.equal (HxTrigger.Throttle "4s" "") "throttle:4s" "Throttle modifier incorrect"
+            }
+            test "succeeds when it is not the first modifier" {
+                Expect.equal (HxTrigger.Throttle "7s" "click") "click throttle:7s" "Throttle modifier incorrect"
+            }
+        ]
+        testList "From" [
+            test "succeeds when it is the first modifier" {
+                Expect.equal (HxTrigger.From ".nav" "") "from:.nav" "From modifier incorrect"
+            }
+            test "succeeds when it is not the first modifier" {
+                Expect.equal (HxTrigger.From "#somewhere" "click") "click from:#somewhere" "From modifier incorrect"
+            }
+        ]
+        testList "FromDocument" [
+            test "succeeds when it is the first modifier" {
+                Expect.equal (HxTrigger.FromDocument "") "from:document" "FromDocument modifier incorrect"
+            } 
+            test "succeeds when it is not the first modifier" {
+                Expect.equal (HxTrigger.FromDocument "click") "click from:document" "FromDocument modifier incorrect"
+            }
+        ]
+        testList "FromWindow" [
+            test "succeeds when it is the first modifier" {
+                Expect.equal (HxTrigger.FromWindow "") "from:window" "FromWindow modifier incorrect"
+            }
+            test "succeeds when it is not the first modifier" {
+                Expect.equal (HxTrigger.FromWindow "click") "click from:window" "FromWindow modifier incorrect"
+            }
+        ]
+        testList "FromClosest" [
+            test "succeeds when it is the first modifier" {
+                Expect.equal (HxTrigger.FromClosest "div" "") "from:closest div" "FromClosest modifier incorrect"
+            }
+            test "succeeds when it is not the first modifier" {
+                Expect.equal (HxTrigger.FromClosest "p" "click") "click from:closest p" "FromClosest modifier incorrect"
+            }
+        ]
+        testList "FromFind" [
+            test "succeeds when it is the first modifier" {
+                Expect.equal (HxTrigger.FromFind "li" "") "from:find li" "FromFind modifier incorrect"
+            }
+            test "succeeds when it is not the first modifier" {
+                Expect.equal (HxTrigger.FromFind ".spot" "click") "click from:find .spot" "FromFind modifier incorrect"
+            }
+        ]
+        testList "Target" [
+            test "succeeds when it is the first modifier" {
+                Expect.equal (HxTrigger.Target "main" "") "target:main" "Target modifier incorrect"
+            }
+            test "succeeds when it is not the first modifier" {
+                Expect.equal (HxTrigger.Target "footer" "click") "click target:footer" "Target modifier incorrect"
+            }
+        ]
+        testList "Consume" [
+            test "succeeds when it is the first modifier" {
+                Expect.equal (HxTrigger.Consume "") "consume" "Consume modifier incorrect"
+            }
+            test "succeeds when it is not the first modifier" {
+                Expect.equal (HxTrigger.Consume "click") "click consume" "Consume modifier incorrect"
+            }
+        ]
+        testList "Queue" [
+            test "succeeds when it is the first modifier" {
+                Expect.equal (HxTrigger.Queue "abc" "") "queue:abc" "Queue modifier incorrect"
+            }
+            test "succeeds when it is not the first modifier" {
+                Expect.equal (HxTrigger.Queue "def" "click") "click queue:def" "Queue modifier incorrect"
+            }
+        ]
+        testList "QueueFirst" [
+            test "succeeds when it is the first modifier" {
+                Expect.equal (HxTrigger.QueueFirst "") "queue:first" "QueueFirst modifier incorrect"
+            }
+            test "succeeds when it is not the first modifier" {
+                Expect.equal (HxTrigger.QueueFirst "click") "click queue:first" "QueueFirst modifier incorrect"
+            }
+        ]
+        testList "QueueLast" [
+            test "succeeds when it is the first modifier" {
+                Expect.equal (HxTrigger.QueueLast "") "queue:last" "QueueLast modifier incorrect"
+            }
+            test "succeeds when it is not the first modifier" {
+                Expect.equal (HxTrigger.QueueLast "click") "click queue:last" "QueueLast modifier incorrect"
+            }
+        ]
+        testList "QueueAll" [
+            test "succeeds when it is the first modifier" {
+                Expect.equal (HxTrigger.QueueAll "") "queue:all" "QueueAll modifier incorrect"
+            }
+            test "succeeds when it is not the first modifier" {
+                Expect.equal (HxTrigger.QueueAll "click") "click queue:all" "QueueAll modifier incorrect"
+            }
+        ]
+        testList "QueueNone" [
+            test "succeeds when it is the first modifier" {
+                Expect.equal (HxTrigger.QueueNone "") "queue:none" "QueueNone modifier incorrect"
+            }
+            test "succeeds when it is not the first modifier" {
+                Expect.equal (HxTrigger.QueueNone "click") "click queue:none" "QueueNone modifier incorrect"
+            }
+        ]
     ]
 
 /// Tests for the HxVals module
 let hxVals =
-    testList "Vals" [
-        test "From succeeds with an empty list" {
-            Expect.equal ("{  }", HxVals.From [])
-        }
-        test "From succeeds and escapes quotes" {
-            Expect.equal ("{ \"test\": \"a \\\"b\\\" c\", \"2\": \"d e f\" }",
-                        HxVals.From [ "test", "a \"b\" c"; "2", "d e f" ])
-        }
+    testList "HxVals" [
+        testList "From" [
+            test "succeeds with an empty list" {
+                Expect.equal (HxVals.From []) "{  }" "From with an empty list is incorrect"
+            }
+            test "succeeds and escapes quotes" {
+                Expect.equal
+                    (HxVals.From [ "test", """a "b" c"""; "2", "d e f" ])
+                    """{ "test": "a \"b\" c", "2": "d e f" }""" "From value is incorrect"
+            }
+        ]
     ]
 
 /// Tests for the HtmxAttrs module
@@ -236,7 +298,8 @@ let attributes =
     testList "Attributes" [
 
         /// Pipe-able assertion for a rendered node 
-        let shouldRender expected node = Expect.equal (expected, RenderView.AsString.htmlNode node)
+        let shouldRender expected node =
+            Expect.equal (RenderView.AsString.htmlNode node) expected "Rendered HTML incorrect"
 
         test "_hxBoost succeeds" {
             div [ _hxBoost ] [] |> shouldRender """<div hx-boost="true"></div>"""
@@ -294,7 +357,8 @@ let attributes =
             img [ _hxPreserve ] |> shouldRender """<img hx-preserve="true">"""
         }
         test "_hxPrompt succeeds" {
-            strong [ _hxPrompt "Who goes there?" ] [] |> shouldRender """<strong hx-prompt="Who goes there?"></strong>"""
+            strong [ _hxPrompt "Who goes there?" ] []
+            |> shouldRender """<strong hx-prompt="Who goes there?"></strong>"""
         }
         test "_hxPushUrl succeeds" {
             dl [ _hxPushUrl "/a-b-c" ] [] |> shouldRender """<dl hx-push-url="/a-b-c"></dl>"""
@@ -315,7 +379,8 @@ let attributes =
             section [ _hxSelectOob "#oob" ] [] |> shouldRender """<section hx-select-oob="#oob"></section>"""
         }
         test "_hxSse succeeds" {
-            footer [ _hxSse "connect:/my-events" ] [] |> shouldRender """<footer hx-sse="connect:/my-events"></footer>"""
+            footer [ _hxSse "connect:/my-events" ] []
+            |> shouldRender """<footer hx-sse="connect:/my-events"></footer>"""
         }
         test "_hxSwap succeeds" {
             del [ _hxSwap "innerHTML" ] [] |> shouldRender """<del hx-swap="innerHTML"></del>"""
@@ -344,17 +409,19 @@ let attributes =
 /// Tests for the Script module
 let script =
     testList "Script" [
-        test "Script.minified succeeds" {
+        test "minified succeeds" {
             let html = RenderView.AsString.htmlNode Script.minified
             Expect.equal
-                ("""<script src="https://unpkg.com/htmx.org@1.8.5" integrity="sha384-7aHh9lqPYGYZ7sTHvzP1t3BAfLhYSTy9ArHdP3Xsr9/3TlGurYgcPBoFmXX2TX/w" crossorigin="anonymous"></script>""",
-                html)
+                html
+                """<script src="https://unpkg.com/htmx.org@1.8.5" integrity="sha384-7aHh9lqPYGYZ7sTHvzP1t3BAfLhYSTy9ArHdP3Xsr9/3TlGurYgcPBoFmXX2TX/w" crossorigin="anonymous"></script>"""
+                "Minified script tag is incorrect"
         }
-        test "Script.unminified succeeds" {
+        test "unminified succeeds" {
             let html = RenderView.AsString.htmlNode Script.unminified
             Expect.equal
-                ("""<script src="https://unpkg.com/htmx.org@1.8.5/dist/htmx.js" integrity="sha384-VgGOQitu5eD5qAdh1QPLvPeTt1X4/Iw9B2sfYw+p3xtTumxaRv+onip7FX+P6q30" crossorigin="anonymous"></script>""",
-                html)
+                html
+                """<script src="https://unpkg.com/htmx.org@1.8.5/dist/htmx.js" integrity="sha384-VgGOQitu5eD5qAdh1QPLvPeTt1X4/Iw9B2sfYw+p3xtTumxaRv+onip7FX+P6q30" crossorigin="anonymous"></script>"""
+                "Unminified script tag is incorrect"
         }
     ]
 
@@ -363,114 +430,145 @@ open System.Text
 /// Tests for the RenderFragment module
 let renderFragment =
     testList "RenderFragment" [
-        test "RenderFragment.findIdNode fails with a Text node" {
-            Expect.isFalse (Option.isSome (RenderFragment.findIdNode "blue" (Text "")))
-        }
-        test "RenderFragment.findIdNode fails with a VoidElement without a matching ID" {
-            Expect.isFalse (Option.isSome (RenderFragment.findIdNode "purple" (br [ _id "mauve" ])))
-        }
-        test "RenderFragment.findIdNode fails with a ParentNode with no children with a matching ID" {
-            Expect.isFalse (Option.isSome (RenderFragment.findIdNode "green" (p [] [ str "howdy"; span [] [ str "huh" ] ])))
-        }
-        test "RenderFragment.findIdNode succeeds with a VoidElement with a matching ID" {
-            let leNode = hr [ _id "groovy" ]
-            let foundNode = RenderFragment.findIdNode "groovy" leNode
-            Expect.isTrue (Option.isSome foundNode)
-            Assert.Same (leNode, foundNode.Value)
-        }
-        test "RenderFragment.findIdNode succeeds with a ParentNode with a child with a matching ID" {
-            let leNode = span [ _id "its-me" ] [ str "Mario" ]
-            let foundNode = RenderFragment.findIdNode "its-me" (p [] [ str "test"; str "again"; leNode; str "un mas" ])
-            Expect.isTrue (Option.isSome foundNode)
-            Assert.Same (leNode, foundNode.Value)
-        }
-        /// Generate a message if the requested ID node is not found
-        let private nodeNotFound (nodeId : string) =
-            $"<em>&ndash; ID {nodeId} not found &ndash;</em>"
-
-        /// Tests for the AsString module
-        testList "AsString" [
-            test "RenderFragment.AsString.htmlFromNodes succeeds when an ID is matched" {
-                let html =
-                    RenderFragment.AsString.htmlFromNodes "needle"
-                        [ p [] []; p [ _id "haystack" ] [ span [ _id "needle" ] [ str "ouch" ]; str "hay"; str "hay" ]]
-                Expect.equal ("""<span id="needle">ouch</span>""", html)
+        
+        /// Validate that the two object references are the same object
+        let isSame obj1 obj2 message =
+            Expect.isTrue (obj.ReferenceEquals (obj1, obj2)) message
+        
+        testList "findIdNode" [
+            test "fails with a Text node" {
+                Expect.isNone (RenderFragment.findIdNode "blue" (Text "")) "There should not have been a node found"
             }
-            test "RenderFragment.AsString.htmlFromNodes fails when an ID is not matched" {
-                Expect.equal (nodeNotFound "oops", RenderFragment.AsString.htmlFromNodes "oops" [])
+            test "fails with a VoidElement without a matching ID" {
+                Expect.isNone
+                    (RenderFragment.findIdNode "purple" (br [ _id "mauve" ])) "There should not have been a node found"
             }
-            test "RenderFragment.AsString.htmlFromNode succeeds when ID is matched at top level" {
-                let html = RenderFragment.AsString.htmlFromNode "wow" (p [ _id "wow" ] [ str "found it" ])
-                Expect.equal ("""<p id="wow">found it</p>""", html)
+            test "fails with a ParentNode with no children with a matching ID" {
+                Expect.isNone
+                    (RenderFragment.findIdNode "green" (p [] [ str "howdy"; span [] [ str "huh" ] ]))
+                    "There should not have been a node found"
             }
-            test "RenderFragment.AsString.htmlFromNode succeeds when ID is matched in child element" {
-                let html =
-                    div [] [ p [] [ str "not it" ]; p [ _id "hey" ] [ str "ta-da" ]]
-                    |> RenderFragment.AsString.htmlFromNode "hey"
-                Expect.equal ("""<p id="hey">ta-da</p>""", html)
+            test "succeeds with a VoidElement with a matching ID" {
+                let leNode = hr [ _id "groovy" ]
+                let foundNode = RenderFragment.findIdNode "groovy" leNode
+                Expect.isSome foundNode "There should have been a node found"
+                isSame leNode foundNode.Value "The node should have been the same object"
             }
-            test "RenderFragment.AsString.htmlFromNode fails when an ID is not matched" {
-                Expect.equal (nodeNotFound "me", RenderFragment.AsString.htmlFromNode "me" (hr []))
+            test "succeeds with a ParentNode with a child with a matching ID" {
+                let leNode = span [ _id "its-me" ] [ str "Mario" ]
+                let foundNode =
+                    RenderFragment.findIdNode "its-me" (p [] [ str "test"; str "again"; leNode; str "un mas" ])
+                Expect.isSome foundNode "There should have been a node found"
+                isSame leNode foundNode.Value "The node should have been the same object"
             }
         ]
-        /// Tests for the AsBytes module
+
+        /// Generate a message if the requested ID node is not found
+        let nodeNotFound (nodeId : string) =
+            $"<em>&ndash; ID {nodeId} not found &ndash;</em>"
+
+        testList "AsString" [
+            testList "htmlFromNodes" [
+                test "succeeds when an ID is matched" {
+                    let html =
+                        RenderFragment.AsString.htmlFromNodes "needle"
+                            [   p [] []
+                                p [ _id "haystack" ] [ str "hay"; span [ _id "needle" ] [ str "ouch" ]; str "hay" ]
+                            ]
+                    Expect.equal html """<span id="needle">ouch</span>""" "HTML is incorrect"
+                }
+                test "fails when an ID is not matched" {
+                    Expect.equal
+                        (RenderFragment.AsString.htmlFromNodes "oops" []) (nodeNotFound "oops") "HTML is incorrect"
+                }
+            ]
+            testList "htmlFromNode" [
+                test "succeeds when ID is matched at top level" {
+                    let html = RenderFragment.AsString.htmlFromNode "wow" (p [ _id "wow" ] [ str "found it" ])
+                    Expect.equal html """<p id="wow">found it</p>""" "HTML is incorrect"
+                }
+                test "succeeds when ID is matched in child element" {
+                    let html =
+                        div [] [ p [] [ str "not it" ]; p [ _id "hey" ] [ str "ta-da" ]]
+                        |> RenderFragment.AsString.htmlFromNode "hey"
+                    Expect.equal html """<p id="hey">ta-da</p>""" "HTML is incorrect"
+                }
+                test "fails when an ID is not matched" {
+                    Expect.equal
+                        (RenderFragment.AsString.htmlFromNode "me" (hr [])) (nodeNotFound "me") "HTML is incorrect"
+                }
+            ]
+        ]
         testList "AsBytes" [
             
             /// Alias for UTF-8 encoding
-            let private utf8 = Encoding.UTF8
+            let utf8 = Encoding.UTF8
 
-            test "RenderFragment.AsBytes.htmlFromNodes succeeds when an ID is matched" {
-                let bytes =
-                    RenderFragment.AsBytes.htmlFromNodes "found"
-                        [ p [] []; p [ _id "not-it" ] [ str "nope"; span [ _id "found" ] [ str "boo" ]; str "nope" ]]
-                Expect.equal<byte> (utf8.GetBytes """<span id="found">boo</span>""", bytes)
-            }
-            test "RenderFragment.AsBytes.htmlFromNodes fails when an ID is not matched" {
-                Expect.equal<byte> (utf8.GetBytes (nodeNotFound "whiff"), RenderFragment.AsBytes.htmlFromNodes "whiff" [])
-            }
-            test "RenderFragment.AsBytes.htmlFromNode succeeds when ID is matched at top level" {
-                let bytes = RenderFragment.AsBytes.htmlFromNode "first" (p [ _id "first" ] [ str "!!!" ])
-                Expect.equal<byte> (utf8.GetBytes """<p id="first">!!!</p>""", bytes)
-            }
-            test "RenderFragment.AsBytes.htmlFromNode succeeds when ID is matched in child element" {
-                let bytes =
-                    div [] [ p [] [ str "not me" ]; p [ _id "child" ] [ str "node" ]]
-                    |> RenderFragment.AsBytes.htmlFromNode "child"
-                Expect.equal<byte> (utf8.GetBytes """<p id="child">node</p>""", bytes)
-            }
-            test "RenderFragment.AsBytes.htmlFromNode fails when an ID is not matched" {
-                Expect.equal<byte> (utf8.GetBytes (nodeNotFound "foo"), RenderFragment.AsBytes.htmlFromNode "foo" (hr []))
-            }
+            testList "htmlFromNodes" [
+                test "succeeds when an ID is matched" {
+                    let bytes =
+                        RenderFragment.AsBytes.htmlFromNodes "found"
+                            [   p [] []
+                                p [ _id "not-it" ] [ str "nope"; span [ _id "found" ] [ str "boo" ]; str "nope" ]
+                            ]
+                    Expect.equal bytes (utf8.GetBytes """<span id="found">boo</span>""") "HTML bytes are incorrect"
+                }
+                test "fails when an ID is not matched" {
+                    Expect.equal
+                        (RenderFragment.AsBytes.htmlFromNodes "whiff" []) (utf8.GetBytes (nodeNotFound "whiff"))
+                        "HTML bytes are incorrect"
+                }
+            ]
+            testList "htmlFromNode" [
+                test "succeeds when ID is matched at top level" {
+                    let bytes = RenderFragment.AsBytes.htmlFromNode "first" (p [ _id "first" ] [ str "!!!" ])
+                    Expect.equal bytes (utf8.GetBytes """<p id="first">!!!</p>""") "HTML bytes are incorrect"
+                }
+                test "succeeds when ID is matched in child element" {
+                    let bytes =
+                        div [] [ p [] [ str "not me" ]; p [ _id "child" ] [ str "node" ]]
+                        |> RenderFragment.AsBytes.htmlFromNode "child"
+                    Expect.equal bytes (utf8.GetBytes """<p id="child">node</p>""") "HTML bytes are incorrect"
+                }
+                test "fails when an ID is not matched" {
+                    Expect.equal
+                        (RenderFragment.AsBytes.htmlFromNode "foo" (hr [])) (utf8.GetBytes (nodeNotFound "foo"))
+                        "HTML bytes are incorrect"
+                }
+            ]
         ]
-        /// Tests for the IntoStringBuilder module
         testList "IntoStringBuilder" [
-            test "RenderFragment.IntoStringBuilder.htmlFromNodes succeeds when an ID is matched" {
-                let sb = StringBuilder ()
-                RenderFragment.IntoStringBuilder.htmlFromNodes sb "find-me"
-                    [ p [] []; p [ _id "peekaboo" ] [ str "bzz"; str "nope"; span [ _id "find-me" ] [ str ";)" ] ]]
-                Expect.equal ("""<span id="find-me">;)</span>""", string sb)
-            }
-            test "RenderFragment.IntoStringBuilder.htmlFromNodes fails when an ID is not matched" {
-                let sb = StringBuilder ()
-                RenderFragment.IntoStringBuilder.htmlFromNodes sb "missing" []
-                Expect.equal (nodeNotFound "missing", string sb)
-            }
-            test "RenderFragment.IntoStringBuilder.htmlFromNode succeeds when ID is matched at top level" {
-                let sb = StringBuilder ()
-                RenderFragment.IntoStringBuilder.htmlFromNode sb "top" (p [ _id "top" ] [ str "pinnacle" ])
-                Expect.equal ("""<p id="top">pinnacle</p>""", string sb)
-            }
-            test "RenderFragment.IntoStringBuilder.htmlFromNode succeeds when ID is matched in child element" {
-                let sb = StringBuilder ()
-                div [] [ p [] [ str "nada" ]; p [ _id "it" ] [ str "is here" ]]
-                |> RenderFragment.IntoStringBuilder.htmlFromNode sb "it"
-                Expect.equal ("""<p id="it">is here</p>""", string sb)
-            }
-            test "RenderFragment.IntoStringBuilder.htmlFromNode fails when an ID is not matched" {
-                let sb = StringBuilder ()
-                RenderFragment.IntoStringBuilder.htmlFromNode sb "bar" (hr [])
-                Expect.equal (nodeNotFound "bar", string sb)
-            }
+            testList "htmlFromNodes" [
+                test "succeeds when an ID is matched" {
+                    let sb = StringBuilder ()
+                    RenderFragment.IntoStringBuilder.htmlFromNodes sb "find-me"
+                        [ p [] []; p [ _id "peekaboo" ] [ str "bzz"; str "nope"; span [ _id "find-me" ] [ str ";)" ] ]]
+                    Expect.equal (string sb) """<span id="find-me">;)</span>""" "HTML is incorrect"
+                }
+                test "fails when an ID is not matched" {
+                    let sb = StringBuilder ()
+                    RenderFragment.IntoStringBuilder.htmlFromNodes sb "missing" []
+                    Expect.equal (string sb) (nodeNotFound "missing") "HTML is incorrect"
+                }
+            ]
+            testList "htmlFromNode" [
+                test "succeeds when ID is matched at top level" {
+                    let sb = StringBuilder ()
+                    RenderFragment.IntoStringBuilder.htmlFromNode sb "top" (p [ _id "top" ] [ str "pinnacle" ])
+                    Expect.equal (string sb) """<p id="top">pinnacle</p>""" "HTML is incorrect"
+                }
+                test "succeeds when ID is matched in child element" {
+                    let sb = StringBuilder ()
+                    div [] [ p [] [ str "nada" ]; p [ _id "it" ] [ str "is here" ]]
+                    |> RenderFragment.IntoStringBuilder.htmlFromNode sb "it"
+                    Expect.equal (string sb) """<p id="it">is here</p>""" "HTML is incorrect"
+                }
+                test "fails when an ID is not matched" {
+                    let sb = StringBuilder ()
+                    RenderFragment.IntoStringBuilder.htmlFromNode sb "bar" (hr [])
+                    Expect.equal (string sb) (nodeNotFound "bar") "HTML is incorrect"
+                }
+            ]
         ]
     ]
 
