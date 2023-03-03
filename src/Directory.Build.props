@@ -2,8 +2,8 @@
 <Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
     <PropertyGroup>
         <TargetFrameworks>net6.0;net7.0</TargetFrameworks>
-        <VersionPrefix>1.8.5</VersionPrefix>
-        <PackageReleaseNotes>Support new hx-history attribute in htmx 1.8.5; add .NET 7 support</PackageReleaseNotes>
+        <VersionPrefix>1.8.6</VersionPrefix>
+        <PackageReleaseNotes>Update script tags for htmx 1.8.6</PackageReleaseNotes>
         <Authors>danieljsummers</Authors>
         <Company>Bit Badger Solutions</Company>
         <PackageProjectUrl>https://github.com/bit-badger/Giraffe.Htmx</PackageProjectUrl>
