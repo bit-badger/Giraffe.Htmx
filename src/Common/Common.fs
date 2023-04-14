@@ -1,4 +1,4 @@
-﻿/// Common definitions shared between attribute values and response headers
+/// Common definitions shared between attribute values and response headers
 [<AutoOpen>]
 module Giraffe.Htmx.Common
 

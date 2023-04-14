@@ -1,4 +1,4 @@
-﻿module Giraffe.Htmx
+module Giraffe.Htmx
 
 open Microsoft.AspNetCore.Http
 open Microsoft.Extensions.Primitives

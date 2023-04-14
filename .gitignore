@@ -5,3 +5,4 @@
 .ionide
 .idea
 *.user
+.vscode

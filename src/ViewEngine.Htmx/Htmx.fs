@@ -223,6 +223,9 @@ module HtmxAttrs =
     /// Overrides a previous `hx-boost`
     let _hxNoBoost    = attr "hx-boost" "false"
     
+    /// Attach an event handler for DOM or htmx events
+    let _hxOn         = attr "hx-on"
+
     /// Filters the parameters that will be submitted with a request
     let _hxParams     = attr "hx-params"
     
@@ -262,6 +265,10 @@ module HtmxAttrs =
     /// Controls how the response content is swapped into the DOM (e.g. 'outerHTML' or 'beforeEnd')
     let _hxSwap       = attr "hx-swap"
     
+    /// Controls how the response content is swapped into the DOM (e.g. 'outerHTML' or 'beforeEnd'), enabling CSS
+    /// transitions
+    let _hxSwapWithTransition = sprintf "%s transition:true" >> _hxSwap
+    
     /// Marks content in a response as being "Out of Band", i.e. swapped somewhere other than the target
     let _hxSwapOob    = attr "hx-swap-oob"
     
@@ -289,14 +296,14 @@ module Script =
   
     /// Script tag to load the minified version from unpkg.com
     let minified =
-        script [ _src         "https://unpkg.com/htmx.org@1.8.6"
-                 _integrity   "sha384-Bj8qm/6B+71E6FQSySofJOUjA/gq330vEqjFx9LakWybUySyI1IQHwPtbTU7bNwx"
+        script [ _src         "https://unpkg.com/htmx.org@1.9.0"
+                 _integrity   "sha384-aOxz9UdWG0yBiyrTwPeMibmaoq07/d3a96GCbb9x60f3mOt5zwkjdbcHFnKH8qls"
                  _crossorigin "anonymous" ] []
 
     /// Script tag to load the unminified version from unpkg.com
     let unminified =
-        script [ _src         "https://unpkg.com/htmx.org@1.8.6/dist/htmx.js"
-                 _integrity   "sha384-denUmZOxhLrCvV+ej1uWe4EXwjmJtWzbg0sjv6YfuHhUAP0CEVIArcYjlUbJHh87"
+        script [ _src         "https://unpkg.com/htmx.org@1.9.0/dist/htmx.js"
+                 _integrity   "sha384-zeiPGhU5MGHaNAV6/ti/m1CChQCUxkLGY/3GVEVPGowI7V2AhfwLDg/zkXjRywCO"
                  _crossorigin "anonymous" ] []
 
 

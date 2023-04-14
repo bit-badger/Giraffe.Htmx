@@ -2,7 +2,7 @@
 
 This package enables [htmx](https://htmx.org) support within the [Giraffe](https://giraffe.wiki) view engine.
 
-**htmx version: 1.8.6**
+**htmx version: 1.9.0**
 
 ### Setup
 
@@ -33,7 +33,13 @@ This also supports [fragment rendering](https://bitbadger.solutions/blog/2022/fr
 
 ### Learn
 
-htmx's attributes and these attribute functions map one-to-one. The lone exception is `_hxBoost`, which implies `true`; use `_hxNoBoost` to set it to `false`. The support modules contain named properties for known values (as illustrated with `HxTrigger.Load` above). A few of the modules are more than collections of names, though:
+htmx's attributes and these attribute functions map one-to-one. There are two exceptions:
+- `_hxBoost` implies `true`; use `_hxNoBoost` to set it to `false`.
+- `_hxSwapWithTransition` renders the standard `hx-swap` attribute and appends `transition:true` to the specified swap value.
+
+The htmx `hx-on` attribute supports multiple events if they are separated with a newline (`\n`) character. The value provided to this attribute will be attribute-escaped, but in testing, it was interpreted correctly.
+
+The support modules contain named properties for known values (as illustrated with `HxTrigger.Load` above). A few of the modules are more than collections of names, though:
 - `HxRequest` has a `Configure` function, which takes a list of strings; the other functions in the module allow for configuring the request.
 
 ```fsharp

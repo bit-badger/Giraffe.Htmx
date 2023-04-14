@@ -344,6 +344,11 @@ let attributes =
         test "_hxNoBoost succeeds" {
             td [ _hxNoBoost ] [] |> shouldRender """<td hx-boost="false"></td>"""
         }
+        test "_hxOn succeeds" {
+            let newLine = "\n"
+            strong [ _hxOn "submit: alert('oops')\nclick: alert('howdy!')" ] []
+            |> shouldRender $"""<strong hx-on="submit: alert(&#39;oops&#39;){newLine}click: alert(&#39;howdy!&#39;)"></strong>"""
+        }
         test "_hxParams succeeds" {
             br [ _hxParams "[p1,p2]" ] |> shouldRender """<br hx-params="[p1,p2]">"""
         }
@@ -385,6 +390,10 @@ let attributes =
         test "_hxSwap succeeds" {
             del [ _hxSwap "innerHTML" ] [] |> shouldRender """<del hx-swap="innerHTML"></del>"""
         }
+        test "_hxSwapWithTransition succeeds" {
+            del [ _hxSwapWithTransition "innerHTML" ] []
+            |> shouldRender """<del hx-swap="innerHTML transition:true"></del>"""
+        }
         test "_hxSwapOob succeeds" {
             li [ _hxSwapOob "true" ] [] |> shouldRender """<li hx-swap-oob="true"></li>"""
         }
@@ -413,14 +422,14 @@ let script =
             let html = RenderView.AsString.htmlNode Script.minified
             Expect.equal
                 html
-                """<script src="https://unpkg.com/htmx.org@1.8.6" integrity="sha384-Bj8qm/6B+71E6FQSySofJOUjA/gq330vEqjFx9LakWybUySyI1IQHwPtbTU7bNwx" crossorigin="anonymous"></script>"""
+                """<script src="https://unpkg.com/htmx.org@1.9.0" integrity="sha384-aOxz9UdWG0yBiyrTwPeMibmaoq07/d3a96GCbb9x60f3mOt5zwkjdbcHFnKH8qls" crossorigin="anonymous"></script>"""
                 "Minified script tag is incorrect"
         }
         test "unminified succeeds" {
             let html = RenderView.AsString.htmlNode Script.unminified
             Expect.equal
                 html
-                """<script src="https://unpkg.com/htmx.org@1.8.6/dist/htmx.js" integrity="sha384-denUmZOxhLrCvV+ej1uWe4EXwjmJtWzbg0sjv6YfuHhUAP0CEVIArcYjlUbJHh87" crossorigin="anonymous"></script>"""
+                """<script src="https://unpkg.com/htmx.org@1.9.0/dist/htmx.js" integrity="sha384-zeiPGhU5MGHaNAV6/ti/m1CChQCUxkLGY/3GVEVPGowI7V2AhfwLDg/zkXjRywCO" crossorigin="anonymous"></script>"""
                 "Unminified script tag is incorrect"
         }
     ]
