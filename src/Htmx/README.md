@@ -2,7 +2,7 @@
 
 This package enables server-side support for [htmx](https://htmx.org) within [Giraffe](https://giraffe.wiki) and ASP.NET's `HttpContext`.
 
-**htmx version: 1.9.0**
+**htmx version: 1.9.2**
 
 ### Setup
 
