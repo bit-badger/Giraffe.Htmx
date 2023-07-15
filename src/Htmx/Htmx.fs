@@ -94,6 +94,10 @@ module Handlers =
     let withHxNoReplaceUrl : HttpHandler =
         toLowerBool false |> withHxReplaceUrl
     
+    /// Override which portion of the response will be swapped into the target document
+    let withHxReselect : string -> HttpHandler =
+        setHttpHeader "HX-Reselect"
+    
     /// Override the `hx-swap` attribute from the initiating element
     let withHxReswap : string -> HttpHandler =
         setHttpHeader "HX-Reswap"

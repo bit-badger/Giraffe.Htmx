@@ -296,14 +296,14 @@ module Script =
   
     /// Script tag to load the minified version from unpkg.com
     let minified =
-        script [ _src         "https://unpkg.com/htmx.org@1.9.2"
-                 _integrity   "sha384-L6OqL9pRWyyFU3+/bjdSri+iIphTN/bvYyM37tICVyOJkWZLpP2vGn6VUEXgzg6h"
+        script [ _src         "https://unpkg.com/htmx.org@1.9.3"
+                 _integrity   "sha384-lVb3Rd/Ca0AxaoZg5sACe8FJKF0tnUgR2Kd7ehUOG5GCcROv5uBIZsOqovBAcWua"
                  _crossorigin "anonymous" ] []
 
     /// Script tag to load the unminified version from unpkg.com
     let unminified =
-        script [ _src         "https://unpkg.com/htmx.org@1.9.2/dist/htmx.js"
-                 _integrity   "sha384-8ADa8Z9mz9MtKHmL1vCmqgEM5Q7eIiradzjEpmeELJ4kex3ibvmnctBNHlpLr/Zl"
+        script [ _src         "https://unpkg.com/htmx.org@1.9.3/dist/htmx.js"
+                 _integrity   "sha384-6nBlGdeSOmH5YDWlJKzskaf7hqWLq8viLPbWeCLsFJXVw7IdNw8GXQnpQ8FwbV8k"
                  _crossorigin "anonymous" ] []
 
 

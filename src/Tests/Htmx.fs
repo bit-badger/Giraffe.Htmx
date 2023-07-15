@@ -265,6 +265,14 @@ let handlers =
             Expect.isTrue (dic.ContainsKey "HX-Replace-Url") "The HX-Replace-Url header should be present"
             Expect.equal dic["HX-Replace-Url"].[0] "false" "The HX-Replace-Url value was incorrect"
         }
+        testTask "withHxReselect succeeds" {
+            let ctx = Substitute.For<HttpContext> ()
+            let dic = HeaderDictionary ()
+            ctx.Response.Headers.ReturnsForAnyArgs dic |> ignore
+            let! _ = withHxReselect "#test" next ctx
+            Expect.isTrue (dic.ContainsKey "HX-Reselect") "The HX-Reselect header should be present"
+            Expect.equal dic["HX-Reselect"].[0] "#test" "The HX-Reselect value was incorrect"
+        } 
         testTask "withHxReswap succeeds" {
             let ctx = Substitute.For<HttpContext> ()
             let dic = HeaderDictionary ()
