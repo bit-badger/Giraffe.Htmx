@@ -313,6 +313,9 @@ let attributes =
         test "_hxDisable succeeds" {
             p [ _hxDisable ] [] |> shouldRender """<p hx-disable></p>"""
         }
+        test "_hxDisabledElt succeeds" {
+            button [ _hxDiabledElt "this" ] [] |> shouldRender """<button hx-disabled-elt="this"></button>"""
+        }
         test "_hxDisinherit succeeds" {
             strong [ _hxDisinherit "*" ] [] |> shouldRender """<strong hx-disinherit="*"></strong>"""
         }
@@ -422,14 +425,14 @@ let script =
             let html = RenderView.AsString.htmlNode Script.minified
             Expect.equal
                 html
-                """<script src="https://unpkg.com/htmx.org@1.9.5" integrity="sha384-xcuj3WpfgjlKF+FXhSQFQ0ZNr39ln+hwjN3npfM9VBnUskLolQAcN80McRIVOPuO" crossorigin="anonymous"></script>"""
+                """<script src="https://unpkg.com/htmx.org@1.9.6" integrity="sha384-FhXw7b6AlE/jyjlZH5iHa/tTe9EpJ1Y55RjcgPbjeWMskSxZt1v9qkxLJWNJaGni" crossorigin="anonymous"></script>"""
                 "Minified script tag is incorrect"
         }
         test "unminified succeeds" {
             let html = RenderView.AsString.htmlNode Script.unminified
             Expect.equal
                 html
-                """<script src="https://unpkg.com/htmx.org@1.9.5/dist/htmx.js" integrity="sha384-7PsmARhgPhXF9ahyuTafz8AWfM9ZfXE9qZJeagUhWAYK632LixPUVjGRZnHP9ylN" crossorigin="anonymous"></script>"""
+                """<script src="https://unpkg.com/htmx.org@1.9.6/dist/htmx.js" integrity="sha384-DyaDHx3hlXQ3QqTsQbNECvRW/A/B+4OtEWLCHbsDRPI3oJ98ekMiWJ4Yyrrqimog" crossorigin="anonymous"></script>"""
                 "Unminified script tag is incorrect"
         }
     ]

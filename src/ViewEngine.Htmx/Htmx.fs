@@ -193,6 +193,9 @@ module HtmxAttrs =
     /// Disables htmx processing for the given node and any children nodes
     let _hxDisable    = flag "hx-disable"
     
+    /// Specifies elements that should be disabled when an htmx request is in flight
+    let _hxDiabledElt = attr "hx-disabled-elt"
+
     /// Disinherit all ("*") or specific htmx attributes
     let _hxDisinherit = attr "hx-disinherit"
     
@@ -296,14 +299,14 @@ module Script =
   
     /// Script tag to load the minified version from unpkg.com
     let minified =
-        script [ _src         "https://unpkg.com/htmx.org@1.9.5"
-                 _integrity   "sha384-xcuj3WpfgjlKF+FXhSQFQ0ZNr39ln+hwjN3npfM9VBnUskLolQAcN80McRIVOPuO"
+        script [ _src         "https://unpkg.com/htmx.org@1.9.6"
+                 _integrity   "sha384-FhXw7b6AlE/jyjlZH5iHa/tTe9EpJ1Y55RjcgPbjeWMskSxZt1v9qkxLJWNJaGni"
                  _crossorigin "anonymous" ] []
 
     /// Script tag to load the unminified version from unpkg.com
     let unminified =
-        script [ _src         "https://unpkg.com/htmx.org@1.9.5/dist/htmx.js"
-                 _integrity   "sha384-7PsmARhgPhXF9ahyuTafz8AWfM9ZfXE9qZJeagUhWAYK632LixPUVjGRZnHP9ylN"
+        script [ _src         "https://unpkg.com/htmx.org@1.9.6/dist/htmx.js"
+                 _integrity   "sha384-DyaDHx3hlXQ3QqTsQbNECvRW/A/B+4OtEWLCHbsDRPI3oJ98ekMiWJ4Yyrrqimog"
                  _crossorigin "anonymous" ] []
 
 
