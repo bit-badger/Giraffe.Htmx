@@ -740,6 +740,13 @@ let attributes =
         test "_hxNoBoost succeeds" {
             td [ _hxNoBoost ] [] |> shouldRender """<td hx-boost="false"></td>"""
         }
+        test "_hxOnEvent succeeds" {
+            a [ _hxOnEvent "click" "doThis()" ] [] |> shouldRender """<a hx-on:click="doThis()"></a>"""
+        }
+        test "_hxOnHxEvent succeeds" {
+            strong [ _hxOnHxEvent BeforeSwap "changeStuff()" ] []
+            |> shouldRender """<strong hx-on::before-swap="changeStuff()"></strong>"""
+        }
         test "_hxParams succeeds" {
             br [ _hxParams "[p1,p2]" ] |> shouldRender """<br hx-params="[p1,p2]">"""
         }
