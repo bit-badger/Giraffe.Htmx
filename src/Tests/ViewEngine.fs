@@ -15,6 +15,399 @@ let hxEncoding =
         }
     ]
 
+let hxEvent =
+    testList "HxEvent" [
+        testList "Abort" [
+            test "ToString succeeds" {
+                Expect.equal (string Abort) "abort" "Abort event name not correct"
+            }
+            test "ToHxOnString succeeds" {
+                Expect.equal (Abort.ToHxOnString()) "abort" "Abort hx-on event name not correct"
+            }
+        ]
+        testList "AfterOnLoad" [
+            test "ToString succeeds" {
+                Expect.equal (string AfterOnLoad) "afterOnLoad" "AfterOnLoad event name not correct"
+            }
+            test "ToHxOnString succeeds" {
+                Expect.equal (AfterOnLoad.ToHxOnString()) "after-on-load" "AfterOnLoad hx-on event name not correct"
+            }
+        ]
+        testList "AfterProcessNode" [
+            test "ToString succeeds" {
+                Expect.equal (string AfterProcessNode) "afterProcessNode" "AfterProcessNode event name not correct"
+            }
+            test "ToHxOnString succeeds" {
+                Expect.equal
+                    (AfterProcessNode.ToHxOnString())
+                    "after-process-node"
+                    "AfterProcessNode hx-on event name not correct"
+            }
+        ]
+        testList "AfterRequest" [
+            test "ToString succeeds" {
+                Expect.equal (string AfterRequest) "afterRequest" "AfterRequest event name not correct"
+            }
+            test "ToHxOnString succeeds" {
+                Expect.equal (AfterRequest.ToHxOnString()) "after-request" "AfterRequest hx-on event name not correct"
+            }
+        ]
+        testList "AfterSettle" [
+            test "ToString succeeds" {
+                Expect.equal (string AfterSettle) "afterSettle" "AfterSettle event name not correct"
+            }
+            test "ToHxOnString succeeds" {
+                Expect.equal (AfterSettle.ToHxOnString()) "after-settle" "AfterSettle hx-on event name not correct"
+            }
+        ]
+        testList "AfterSwap" [
+            test "ToString succeeds" {
+                Expect.equal (string AfterSwap) "afterSwap" "AfterSwap event name not correct"
+            }
+            test "ToHxOnString succeeds" {
+                Expect.equal (AfterSwap.ToHxOnString()) "after-swap" "AfterSwap hx-on event name not correct"
+            }
+        ]
+        testList "BeforeCleanupElement" [
+            test "ToString succeeds" {
+                Expect.equal
+                    (string BeforeCleanupElement) "beforeCleanupElement" "BeforeCleanupElement event name not correct"
+            }
+            test "ToHxOnString succeeds" {
+                Expect.equal
+                    (BeforeCleanupElement.ToHxOnString())
+                    "before-cleanup-element"
+                    "BeforeCleanupElement hx-on event name not correct"
+            }
+        ]
+        testList "BeforeOnLoad" [
+            test "ToString succeeds" {
+                Expect.equal (string BeforeOnLoad) "beforeOnLoad" "BeforeOnLoad event name not correct"
+            }
+            test "ToHxOnString succeeds" {
+                Expect.equal (BeforeOnLoad.ToHxOnString()) "before-on-load" "BeforeOnLoad hx-on event name not correct"
+            }
+        ]
+        testList "BeforeProcessNode" [
+            test "ToString succeeds" {
+                Expect.equal (string BeforeProcessNode) "beforeProcessNode" "BeforeProcessNode event name not correct"
+            }
+            test "ToHxOnString succeeds" {
+                Expect.equal
+                    (BeforeProcessNode.ToHxOnString())
+                    "before-process-node"
+                    "BeforeProcessNode hx-on event name not correct"
+            }
+        ]
+        testList "BeforeRequest" [
+            test "ToString succeeds" {
+                Expect.equal (string BeforeRequest) "beforeRequest" "BeforeRequest event name not correct"
+            }
+            test "ToHxOnString succeeds" {
+                Expect.equal
+                    (BeforeRequest.ToHxOnString()) "before-request" "BeforeRequest hx-on event name not correct"
+            }
+        ]
+        testList "BeforeSwap" [
+            test "ToString succeeds" {
+                Expect.equal (string BeforeSwap) "beforeSwap" "BeforeSwap event name not correct"
+            }
+            test "ToHxOnString succeeds" {
+                Expect.equal (BeforeSwap.ToHxOnString()) "before-swap" "BeforeSwap hx-on event name not correct"
+            }
+        ]
+        testList "BeforeSend" [
+            test "ToString succeeds" {
+                Expect.equal (string BeforeSend) "beforeSend" "BeforeSend event name not correct"
+            }
+            test "ToHxOnString succeeds" {
+                Expect.equal (BeforeSend.ToHxOnString()) "before-send" "BeforeSend hx-on event name not correct"
+            }
+        ]
+        testList "ConfigRequest" [
+            test "ToString succeeds" {
+                Expect.equal (string ConfigRequest) "configRequest" "ConfigRequest event name not correct"
+            }
+            test "ToHxOnString succeeds" {
+                Expect.equal
+                    (ConfigRequest.ToHxOnString()) "config-request" "ConfigRequest hx-on event name not correct"
+            }
+        ]
+        testList "Confirm" [
+            test "ToString succeeds" {
+                Expect.equal (string Confirm) "confirm" "Confirm event name not correct"
+            }
+            test "ToHxOnString succeeds" {
+                Expect.equal (Confirm.ToHxOnString()) "confirm" "Confirm hx-on event name not correct"
+            }
+        ]
+        testList "HistoryCacheError" [
+            test "ToString succeeds" {
+                Expect.equal (string HistoryCacheError) "historyCacheError" "HistoryCacheError event name not correct"
+            }
+            test "ToHxOnString succeeds" {
+                Expect.equal
+                    (HistoryCacheError.ToHxOnString())
+                    "history-cache-error"
+                    "HistoryCacheError hx-on event name not correct"
+            }
+        ]
+        testList "HistoryCacheMiss" [
+            test "ToString succeeds" {
+                Expect.equal (string HistoryCacheMiss) "historyCacheMiss" "HistoryCacheMiss event name not correct"
+            }
+            test "ToHxOnString succeeds" {
+                Expect.equal
+                    (HistoryCacheMiss.ToHxOnString())
+                    "history-cache-miss"
+                    "HistoryCacheMiss hx-on event name not correct"
+            }
+        ]
+        testList "HistoryCacheMissError" [
+            test "ToString succeeds" {
+                Expect.equal
+                    (string HistoryCacheMissError)
+                    "historyCacheMissError"
+                    "HistoryCacheMissError event name not correct"
+            }
+            test "ToHxOnString succeeds" {
+                Expect.equal
+                    (HistoryCacheMissError.ToHxOnString())
+                    "history-cache-miss-error"
+                    "HistoryCacheMissError hx-on event name not correct"
+            }
+        ]
+        testList "HistoryCacheMissLoad" [
+            test "ToString succeeds" {
+                Expect.equal
+                    (string HistoryCacheMissLoad) "historyCacheMissLoad" "HistoryCacheMissLoad event name not correct"
+            }
+            test "ToHxOnString succeeds" {
+                Expect.equal
+                    (HistoryCacheMissLoad.ToHxOnString())
+                    "history-cache-miss-load"
+                    "HistoryCacheMissLoad hx-on event name not correct"
+            }
+        ]
+        testList "HistoryRestore" [
+            test "ToString succeeds" {
+                Expect.equal (string HistoryRestore) "historyRestore" "HistoryRestore event name not correct"
+            }
+            test "ToHxOnString succeeds" {
+                Expect.equal
+                    (HistoryRestore.ToHxOnString()) "history-restore" "HistoryRestore hx-on event name not correct"
+            }
+        ]
+        testList "BeforeHistorySave" [
+            test "ToString succeeds" {
+                Expect.equal (string BeforeHistorySave) "beforeHistorySave" "BeforeHistorySave event name not correct"
+            }
+            test "ToHxOnString succeeds" {
+                Expect.equal
+                    (BeforeHistorySave.ToHxOnString())
+                    "before-history-save"
+                    "BeforeHistorySave hx-on event name not correct"
+            }
+        ]
+        testList "Load" [
+            test "ToString succeeds" {
+                Expect.equal (string Load) "load" "Load event name not correct"
+            }
+            test "ToHxOnString succeeds" {
+                Expect.equal (Load.ToHxOnString()) "load" "Load hx-on event name not correct"
+            }
+        ]
+        testList "NoSseSourceError" [
+            test "ToString succeeds" {
+                Expect.equal (string NoSseSourceError) "noSSESourceError" "NoSseSourceError event name not correct"
+            }
+            test "ToHxOnString succeeds" {
+                Expect.equal
+                    (NoSseSourceError.ToHxOnString())
+                    "no-sse-source-error"
+                    "NoSseSourceError hx-on event name not correct"
+            }
+        ]
+        testList "OnLoadError" [
+            test "ToString succeeds" {
+                Expect.equal (string OnLoadError) "onLoadError" "OnLoadError event name not correct"
+            }
+            test "ToHxOnString succeeds" {
+                Expect.equal (OnLoadError.ToHxOnString()) "on-load-error" "OnLoadError hx-on event name not correct"
+            }
+        ]
+        testList "OobAfterSwap" [
+            test "ToString succeeds" {
+                Expect.equal (string OobAfterSwap) "oobAfterSwap" "OobAfterSwap event name not correct"
+            }
+            test "ToHxOnString succeeds" {
+                Expect.equal (OobAfterSwap.ToHxOnString()) "oob-after-swap" "OobAfterSwap hx-on event name not correct"
+            }
+        ]
+        testList "OobBeforeSwap" [
+            test "ToString succeeds" {
+                Expect.equal (string OobBeforeSwap) "oobBeforeSwap" "OobBeforeSwap event name not correct"
+            }
+            test "ToHxOnString succeeds" {
+                Expect.equal
+                    (OobBeforeSwap.ToHxOnString()) "oob-before-swap" "OobBeforeSwap hx-on event name not correct"
+            }
+        ]
+        testList "OobErrorNoTarget" [
+            test "ToString succeeds" {
+                Expect.equal (string OobErrorNoTarget) "oobErrorNoTarget" "OobErrorNoTarget event name not correct"
+            }
+            test "ToHxOnString succeeds" {
+                Expect.equal
+                    (OobErrorNoTarget.ToHxOnString())
+                    "oob-error-no-target"
+                    "OobErrorNoTarget hx-on event name not correct"
+            }
+        ]
+        testList "Prompt" [
+            test "ToString succeeds" {
+                Expect.equal (string Prompt) "prompt" "Prompt event name not correct"
+            }
+            test "ToHxOnString succeeds" {
+                Expect.equal (Prompt.ToHxOnString()) "prompt" "Prompt hx-on event name not correct"
+            }
+        ]
+        testList "PushedIntoHistory" [
+            test "ToString succeeds" {
+                Expect.equal (string PushedIntoHistory) "pushedIntoHistory" "PushedIntoHistory event name not correct"
+            }
+            test "ToHxOnString succeeds" {
+                Expect.equal
+                    (PushedIntoHistory.ToHxOnString())
+                    "pushed-into-history"
+                    "PushedIntoHistory hx-on event name not correct"
+            }
+        ]
+        testList "ResponseError" [
+            test "ToString succeeds" {
+                Expect.equal (string ResponseError) "responseError" "ResponseError event name not correct"
+            }
+            test "ToHxOnString succeeds" {
+                Expect.equal
+                    (ResponseError.ToHxOnString()) "response-error" "ResponseError hx-on event name not correct"
+            }
+        ]
+        testList "SendError" [
+            test "ToString succeeds" {
+                Expect.equal (string SendError) "sendError" "SendError event name not correct"
+            }
+            test "ToHxOnString succeeds" {
+                Expect.equal (SendError.ToHxOnString()) "send-error" "SendError hx-on event name not correct"
+            }
+        ]
+        testList "SseError" [
+            test "ToString succeeds" {
+                Expect.equal (string SseError) "sseError" "SseError event name not correct"
+            }
+            test "ToHxOnString succeeds" {
+                Expect.equal (SseError.ToHxOnString()) "sse-error" "SseError hx-on event name not correct"
+            }
+        ]
+        testList "SseOpen" [
+            test "ToString succeeds" {
+                Expect.equal (string SseOpen) "sseOpen" "SseOpen event name not correct"
+            }
+            test "ToHxOnString succeeds" {
+                Expect.equal (SseOpen.ToHxOnString()) "sse-open" "SseOpen hx-on event name not correct"
+            }
+        ]
+        testList "SwapError" [
+            test "ToString succeeds" {
+                Expect.equal (string SwapError) "swapError" "SwapError event name not correct"
+            }
+            test "ToHxOnString succeeds" {
+                Expect.equal (SwapError.ToHxOnString()) "swap-error" "SwapError hx-on event name not correct"
+            }
+        ]
+        testList "TargetError" [
+            test "ToString succeeds" {
+                Expect.equal (string TargetError) "targetError" "TargetError event name not correct"
+            }
+            test "ToHxOnString succeeds" {
+                Expect.equal (TargetError.ToHxOnString()) "target-error" "TargetError hx-on event name not correct"
+            }
+        ]
+        testList "Timeout" [
+            test "ToString succeeds" {
+                Expect.equal (string Timeout) "timeout" "Timeout event name not correct"
+            }
+            test "ToHxOnString succeeds" {
+                Expect.equal (Timeout.ToHxOnString()) "timeout" "Timeout hx-on event name not correct"
+            }
+        ]
+        testList "ValidationValidate" [
+            test "ToString succeeds" {
+                Expect.equal
+                    (string ValidationValidate) "validation:validate" "ValidationValidate event name not correct"
+            }
+            test "ToHxOnString succeeds" {
+                Expect.equal
+                    (ValidationValidate.ToHxOnString())
+                    "validation:validate"
+                    "ValidationValidate hx-on event name not correct"
+            }
+        ]
+        testList "ValidationFailed" [
+            test "ToString succeeds" {
+                Expect.equal (string ValidationFailed) "validation:failed" "ValidationFailed event name not correct"
+            }
+            test "ToHxOnString succeeds" {
+                Expect.equal
+                    (ValidationFailed.ToHxOnString())
+                    "validation:failed"
+                    "ValidationFailed hx-on event name not correct"
+            }
+        ]
+        testList "ValidationHalted" [
+            test "ToString succeeds" {
+                Expect.equal (string ValidationHalted) "validation:halted" "ValidationHalted event name not correct"
+            }
+            test "ToHxOnString succeeds" {
+                Expect.equal
+                    (ValidationHalted.ToHxOnString())
+                    "validation:halted"
+                    "ValidationHalted hx-on event name not correct"
+            }
+        ]
+        testList "XhrAbort" [
+            test "ToString succeeds" {
+                Expect.equal (string XhrAbort) "xhr:abort" "XhrAbort event name not correct"
+            }
+            test "ToHxOnString succeeds" {
+                Expect.equal (XhrAbort.ToHxOnString()) "xhr:abort" "XhrAbort hx-on event name not correct"
+            }
+        ]
+        testList "XhrLoadEnd" [
+            test "ToString succeeds" {
+                Expect.equal (string XhrLoadEnd) "xhr:loadend" "XhrLoadEnd event name not correct"
+            }
+            test "ToHxOnString succeeds" {
+                Expect.equal (XhrLoadEnd.ToHxOnString()) "xhr:loadend" "XhrLoadEnd hx-on event name not correct"
+            }
+        ]
+        testList "XhrLoadStart" [
+            test "ToString succeeds" {
+                Expect.equal (string XhrLoadStart) "xhr:loadstart" "XhrLoadStart event name not correct"
+            }
+            test "ToHxOnString succeeds" {
+                Expect.equal (XhrLoadStart.ToHxOnString()) "xhr:loadstart" "XhrLoadStart hx-on event name not correct"
+            }
+        ]
+        testList "XhrProgress" [
+            test "ToString succeeds" {
+                Expect.equal (string XhrProgress) "xhr:progress" "XhrProgress event name not correct"
+            }
+            test "ToHxOnString succeeds" {
+                Expect.equal (XhrProgress.ToHxOnString()) "xhr:progress" "XhrProgress hx-on event name not correct"
+            }
+        ]
+        
+    ]
 /// Tests for the HxHeaders module
 let hxHeaders =
     testList "HxHeaders" [
@@ -293,13 +686,13 @@ let hxVals =
         ]
     ]
 
+/// Pipe-able assertion for a rendered node 
+let shouldRender expected node =
+    Expect.equal (RenderView.AsString.htmlNode node) expected "Rendered HTML incorrect"
+
 /// Tests for the HtmxAttrs module
 let attributes =
     testList "Attributes" [
-
-        /// Pipe-able assertion for a rendered node 
-        let shouldRender expected node =
-            Expect.equal (RenderView.AsString.htmlNode node) expected "Rendered HTML incorrect"
 
         test "_hxBoost succeeds" {
             div [ _hxBoost ] [] |> shouldRender """<div hx-boost="true"></div>"""
@@ -314,7 +707,7 @@ let attributes =
             p [ _hxDisable ] [] |> shouldRender """<p hx-disable></p>"""
         }
         test "_hxDisabledElt succeeds" {
-            button [ _hxDiabledElt "this" ] [] |> shouldRender """<button hx-disabled-elt="this"></button>"""
+            button [ _hxDisabledElt "this" ] [] |> shouldRender """<button hx-disabled-elt="this"></button>"""
         }
         test "_hxDisinherit succeeds" {
             strong [ _hxDisinherit "*" ] [] |> shouldRender """<strong hx-disinherit="*"></strong>"""
@@ -347,10 +740,12 @@ let attributes =
         test "_hxNoBoost succeeds" {
             td [ _hxNoBoost ] [] |> shouldRender """<td hx-boost="false"></td>"""
         }
-        test "_hxOn succeeds" {
-            let newLine = "\n"
-            strong [ _hxOn "submit: alert('oops')\nclick: alert('howdy!')" ] []
-            |> shouldRender $"""<strong hx-on="submit: alert(&#39;oops&#39;){newLine}click: alert(&#39;howdy!&#39;)"></strong>"""
+        test "_hxOnEvent succeeds" {
+            a [ _hxOnEvent "click" "doThis()" ] [] |> shouldRender """<a hx-on:click="doThis()"></a>"""
+        }
+        test "_hxOnHxEvent succeeds" {
+            strong [ _hxOnHxEvent BeforeSwap "changeStuff()" ] []
+            |> shouldRender """<strong hx-on::before-swap="changeStuff()"></strong>"""
         }
         test "_hxParams succeeds" {
             br [ _hxParams "[p1,p2]" ] |> shouldRender """<br hx-params="[p1,p2]">"""
@@ -425,14 +820,14 @@ let script =
             let html = RenderView.AsString.htmlNode Script.minified
             Expect.equal
                 html
-                """<script src="https://unpkg.com/htmx.org@1.9.8" integrity="sha384-rgjA7mptc2ETQqXoYC3/zJvkU7K/aP44Y+z7xQuJiVnB/422P/Ak+F/AqFR7E4Wr" crossorigin="anonymous"></script>"""
+                """<script src="https://unpkg.com/htmx.org@1.9.10" integrity="sha384-D1Kt99CQMDuVetoL1lrYwg5t+9QdHe7NLX/SoJYkXDFfX37iInKRy5xLSi8nO7UC" crossorigin="anonymous"></script>"""
                 "Minified script tag is incorrect"
         }
         test "unminified succeeds" {
             let html = RenderView.AsString.htmlNode Script.unminified
             Expect.equal
                 html
-                """<script src="https://unpkg.com/htmx.org@1.9.8/dist/htmx.js" integrity="sha384-zOAIsdGekNHQVAjCjVrQ1xHoxyvnxgr63EH6IyXsCfvKZdRFRyG1u8GbWxO5oZ38" crossorigin="anonymous"></script>"""
+                """<script src="https://unpkg.com/htmx.org@1.9.10/dist/htmx.js" integrity="sha384-j1TtLExqttdT7C3Z/rJy8UZcCGiuqwwN9++coZ6up+5O/l2FHdp3IGfuJOvst6d1" crossorigin="anonymous"></script>"""
                 "Unminified script tag is incorrect"
         }
     ]
@@ -584,7 +979,30 @@ let renderFragment =
         ]
     ]
 
+#nowarn "44"
+
+/// Tests for the HtmxAttrs module
+let deprecatedAttributes =
+    testList "Deprecated Attributes" [
+        test "_hxOn succeeds" {
+            let newLine = "\n"
+            strong [ _hxOn "submit: alert('oops')\nclick: alert('howdy!')" ] []
+            |> shouldRender $"""<strong hx-on="submit: alert(&#39;oops&#39;){newLine}click: alert(&#39;howdy!&#39;)"></strong>"""
+        }
+    ]
+
 /// All tests in this module
 let allTests =
-    testList "ViewEngine.Htmx"
-             [ hxEncoding; hxHeaders; hxParams; hxRequest; hxTrigger; hxVals; attributes; script; renderFragment ]
+    testList "ViewEngine.Htmx" [
+        hxEncoding
+        hxEvent
+        hxHeaders
+        hxParams
+        hxRequest
+        hxTrigger
+        hxVals
+        attributes
+        script
+        renderFragment
+        deprecatedAttributes
+    ]

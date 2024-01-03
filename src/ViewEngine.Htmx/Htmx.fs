@@ -19,6 +19,146 @@ module HxEncoding =
     let MultipartForm = "multipart/form-data"
 
 
+/// The events recognized by htmx
+type HxEvent =
+    /// Send this event to an element to abort a request
+    | Abort
+    /// Triggered after an AJAX request has completed processing a successful response
+    | AfterOnLoad
+    /// Triggered after htmx has initialized a node
+    | AfterProcessNode
+    /// Triggered after an AJAX request has completed
+    | AfterRequest
+    /// Triggered after the DOM has settled
+    | AfterSettle
+    /// Triggered after new content has been swapped in
+    | AfterSwap
+    /// Triggered before htmx disables an element or removes it from the DOM
+    | BeforeCleanupElement
+    /// Triggered before any response processing occurs
+    | BeforeOnLoad
+    /// Triggered before htmx initializes a node
+    | BeforeProcessNode
+    /// Triggered before an AJAX request is made
+    | BeforeRequest
+    /// Triggered before a swap is done, allows you to configure the swap
+    | BeforeSwap
+    /// Triggered just before an ajax request is sent
+    | BeforeSend
+    /// Triggered before the request, allows you to customize parameters, headers
+    | ConfigRequest
+    /// Triggered after a trigger occurs on an element, allows you to cancel (or delay) issuing the AJAX request
+    | Confirm
+    /// Triggered on an error during cache writing
+    | HistoryCacheError
+    /// Triggered on a cache miss in the history subsystem
+    | HistoryCacheMiss
+    /// Triggered on a unsuccessful remote retrieval
+    | HistoryCacheMissError
+    /// Triggered on a successful remote retrieval
+    | HistoryCacheMissLoad
+    /// Triggered when htmx handles a history restoration action
+    | HistoryRestore
+    /// Triggered before content is saved to the history cache
+    | BeforeHistorySave
+    /// Triggered when new content is added to the DOM
+    | Load
+    /// Triggered when an element refers to a SSE event in its trigger, but no parent SSE source has been defined
+    | NoSseSourceError
+    /// Triggered when an exception occurs during the onLoad handling in htmx
+    | OnLoadError
+    /// Triggered after an out of band element as been swapped in
+    | OobAfterSwap
+    /// Triggered before an out of band element swap is done, allows you to configure the swap
+    | OobBeforeSwap
+    /// Triggered when an out of band element does not have a matching ID in the current DOM
+    | OobErrorNoTarget
+    /// Triggered after a prompt is shown
+    | Prompt
+    /// Triggered after an url is pushed into history
+    | PushedIntoHistory
+    /// Triggered when an HTTP response error (non-200 or 300 response code) occurs
+    | ResponseError
+    /// Triggered when a network error prevents an HTTP request from happening
+    | SendError
+    /// Triggered when an error occurs with a SSE source
+    | SseError
+    /// Triggered when a SSE source is opened
+    | SseOpen
+    /// Triggered when an error occurs during the swap phase
+    | SwapError
+    /// Triggered when an invalid target is specified
+    | TargetError
+    /// Triggered when a request timeout occurs
+    | Timeout
+    /// Triggered before an element is validated
+    | ValidationValidate
+    /// Triggered when an element fails validation
+    | ValidationFailed
+    /// Triggered when a request is halted due to validation errors
+    | ValidationHalted
+    /// Triggered when an ajax request aborts
+    | XhrAbort
+    /// Triggered when an ajax request ends
+    | XhrLoadEnd
+    /// Triggered when an ajax request starts
+    | XhrLoadStart
+    /// Triggered periodically during an ajax request that supports progress events
+    | XhrProgress
+    
+    /// The htmx event name (fst) and kebab-case name (snd, for use with hx-on)
+    static member private Values = Map [
+        Abort, ("abort", "abort")
+        AfterOnLoad, ("afterOnLoad", "after-on-load")
+        AfterProcessNode, ("afterProcessNode", "after-process-node")
+        AfterRequest, ("afterRequest", "after-request")
+        AfterSettle, ("afterSettle", "after-settle")
+        AfterSwap, ("afterSwap", "after-swap")
+        BeforeCleanupElement, ("beforeCleanupElement", "before-cleanup-element")
+        BeforeOnLoad, ("beforeOnLoad", "before-on-load")
+        BeforeProcessNode, ("beforeProcessNode", "before-process-node")
+        BeforeRequest, ("beforeRequest", "before-request")
+        BeforeSwap, ("beforeSwap", "before-swap")
+        BeforeSend, ("beforeSend", "before-send")
+        ConfigRequest, ("configRequest", "config-request")
+        Confirm, ("confirm", "confirm")
+        HistoryCacheError, ("historyCacheError", "history-cache-error")
+        HistoryCacheMiss, ("historyCacheMiss", "history-cache-miss")
+        HistoryCacheMissError, ("historyCacheMissError", "history-cache-miss-error")
+        HistoryCacheMissLoad, ("historyCacheMissLoad", "history-cache-miss-load")
+        HistoryRestore, ("historyRestore", "history-restore")
+        BeforeHistorySave, ("beforeHistorySave", "before-history-save")
+        Load, ("load", "load")
+        NoSseSourceError, ("noSSESourceError", "no-sse-source-error")
+        OnLoadError, ("onLoadError", "on-load-error")
+        OobAfterSwap, ("oobAfterSwap", "oob-after-swap")
+        OobBeforeSwap, ("oobBeforeSwap", "oob-before-swap")
+        OobErrorNoTarget, ("oobErrorNoTarget", "oob-error-no-target")
+        Prompt, ("prompt", "prompt")
+        PushedIntoHistory, ("pushedIntoHistory", "pushed-into-history")
+        ResponseError, ("responseError", "response-error")
+        SendError, ("sendError", "send-error")
+        SseError, ("sseError", "sse-error")
+        SseOpen, ("sseOpen", "sse-open")
+        SwapError, ("swapError", "swap-error")
+        TargetError, ("targetError", "target-error")
+        Timeout, ("timeout", "timeout")
+        ValidationValidate, ("validation:validate", "validation:validate")
+        ValidationFailed, ("validation:failed", "validation:failed")
+        ValidationHalted, ("validation:halted", "validation:halted")
+        XhrAbort, ("xhr:abort", "xhr:abort")
+        XhrLoadEnd, ("xhr:loadend", "xhr:loadend")
+        XhrLoadStart, ("xhr:loadstart", "xhr:loadstart")
+        XhrProgress, ("xhr:progress", "xhr:progress")
+    ]
+    
+    /// The htmx event name 
+    override this.ToString() = fst HxEvent.Values[this]
+    
+    /// The hx-on variant of the htmx event name
+    member this.ToHxOnString() = snd HxEvent.Values[this]
+
+
 /// Helper to create the `hx-headers` attribute
 [<RequireQualifiedAccess>]
 module HxHeaders =
@@ -176,6 +316,7 @@ module HxVals =
     /// Create values from a list of key/value pairs
     let From = toJson
 
+open System
 
 /// Attributes and flags for htmx
 [<AutoOpen>]
@@ -194,7 +335,7 @@ module HtmxAttrs =
     let _hxDisable    = flag "hx-disable"
     
     /// Specifies elements that should be disabled when an htmx request is in flight
-    let _hxDiabledElt = attr "hx-disabled-elt"
+    let _hxDisabledElt = attr "hx-disabled-elt"
 
     /// Disinherit all ("*") or specific htmx attributes
     let _hxDisinherit = attr "hx-disinherit"
@@ -227,7 +368,16 @@ module HtmxAttrs =
     let _hxNoBoost    = attr "hx-boost" "false"
     
     /// Attach an event handler for DOM or htmx events
+    [<Obsolete "This will be removed in htmx 2; use _hxOnEvent or _hxOnHxEvent instead">]
     let _hxOn         = attr "hx-on"
+
+    /// Attach an event handler for DOM events
+    let _hxOnEvent evtName =
+        attr $"hx-on:%s{evtName}"
+
+    /// Attach an event handler for htmx events
+    let _hxOnHxEvent (hxEvent: HxEvent) =
+        _hxOnEvent $":{hxEvent.ToHxOnString()}"
 
     /// Filters the parameters that will be submitted with a request
     let _hxParams     = attr "hx-params"
@@ -299,14 +449,14 @@ module Script =
   
     /// Script tag to load the minified version from unpkg.com
     let minified =
-        script [ _src         "https://unpkg.com/htmx.org@1.9.8"
-                 _integrity   "sha384-rgjA7mptc2ETQqXoYC3/zJvkU7K/aP44Y+z7xQuJiVnB/422P/Ak+F/AqFR7E4Wr"
+        script [ _src         "https://unpkg.com/htmx.org@1.9.10"
+                 _integrity   "sha384-D1Kt99CQMDuVetoL1lrYwg5t+9QdHe7NLX/SoJYkXDFfX37iInKRy5xLSi8nO7UC"
                  _crossorigin "anonymous" ] []
 
     /// Script tag to load the unminified version from unpkg.com
     let unminified =
-        script [ _src         "https://unpkg.com/htmx.org@1.9.8/dist/htmx.js"
-                 _integrity   "sha384-zOAIsdGekNHQVAjCjVrQ1xHoxyvnxgr63EH6IyXsCfvKZdRFRyG1u8GbWxO5oZ38"
+        script [ _src         "https://unpkg.com/htmx.org@1.9.10/dist/htmx.js"
+                 _integrity   "sha384-j1TtLExqttdT7C3Z/rJy8UZcCGiuqwwN9++coZ6up+5O/l2FHdp3IGfuJOvst6d1"
                  _crossorigin "anonymous" ] []
 
 

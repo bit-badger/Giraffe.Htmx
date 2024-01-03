@@ -67,10 +67,10 @@ If you want to load htmx from unpkg, `Htmx.Script.minified` or `Htmx.Script.unmi
 
 ## Feedback / Help
 
-The author hangs out in the #htmx-general channel of the [htmx Discord server](https://htmx.org/discord) and the #web channel of the [F# Software Foundation's Slack server](https://fsharp.org/guides/slack/).
+The author hangs out in the #dotnet-htmx channel (and most others) of the [htmx Discord server](https://htmx.org/discord) and the #web channel of the [F# Software Foundation's Slack server](https://fsharp.org/guides/slack/).
 
 ## Thanks
-|[<img src="https://giraffe.wiki/giraffe.png" alt="Giraffe logo" width="200">](https://giraffe.wiki)|[<img src="https://bitbadger.solutions/htmx-black-transparent.svg" alt="htmx logo" width="200">](https://htmx.org)|[<img src="https://resources.jetbrains.com/storage/products/company/brand/logos/jb_beam.png" alt="JetBrains Logo (Main)" width="200">](https://jb.gg/OpenSource)|
-| :---: | :---: | :---: |
-|for making ASP.NET Core functional|for making HTML cool again|for licensing their tools to this project|
+|[<img src="https://giraffe.wiki/giraffe.png" alt="Giraffe logo" width="200">](https://giraffe.wiki)| [<img src="https://bitbadger.solutions/upload/bit-badger/2024/01/htmx-black-transparent.svg" alt="htmx logo" width="200">](https://htmx.org) |[<img src="https://resources.jetbrains.com/storage/products/company/brand/logos/jb_beam.png" alt="JetBrains Logo (Main)" width="200">](https://jb.gg/OpenSource)|
+| :---: |:------------------------------------------------------------------------------------------------------------------------------------:| :---: |
+|for making ASP.NET Core functional|                                                      for making HTML cool again                                                      |for licensing their tools to this project|
 

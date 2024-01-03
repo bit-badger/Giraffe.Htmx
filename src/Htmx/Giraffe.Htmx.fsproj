@@ -9,10 +9,11 @@
   <ItemGroup>
     <Compile Include="Htmx.fs" />
     <None Include="README.md" Pack="true" PackagePath="\" />
+    <None Include="..\icon.png" Pack="true" PackagePath="\" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Giraffe" Version="5.0.0" />
+    <PackageReference Include="Giraffe" Version="6.2.0" />
   </ItemGroup>
 
   <ItemGroup>
