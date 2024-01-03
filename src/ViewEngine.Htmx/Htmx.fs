@@ -20,6 +20,7 @@ module HxEncoding =
 
 
 /// The events recognized by htmx
+[<Struct>]
 type HxEvent =
     /// Send this event to an element to abort a request
     | Abort

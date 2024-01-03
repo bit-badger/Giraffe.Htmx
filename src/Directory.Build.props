@@ -3,7 +3,7 @@
     <PropertyGroup>
         <TargetFrameworks>net6.0;net7.0;net8.0</TargetFrameworks>
         <VersionPrefix>1.9.10</VersionPrefix>
-        <PackageReleaseNotes>Update script tags to pull htmx 1.9.10; add support for .NET 8</PackageReleaseNotes>
+        <PackageReleaseNotes>Update script tags to pull htmx 1.9.10; add support for hx-on:* attributes; require lowest FSharp.Core version; fix _hxDisabledElt spelling</PackageReleaseNotes>
         <Authors>danieljsummers</Authors>
         <Company>Bit Badger Solutions</Company>
         <PackageProjectUrl>https://github.com/bit-badger/Giraffe.Htmx</PackageProjectUrl>
@@ -14,9 +14,4 @@
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
         <PackageTags>Giraffe htmx</PackageTags>
     </PropertyGroup>
-
-    <ItemGroup>
-        <PackageReference Update="FSharp.Core" Version="6.0.0" />
-    </ItemGroup>
-
 </Project>
