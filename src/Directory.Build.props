@@ -13,6 +13,6 @@
         <RepositoryType>Git</RepositoryType>
         <Copyright>MIT License</Copyright>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
-        <PackageTags>Giraffe htmx</PackageTags>
+        <PackageTags>Giraffe htmx alpha</PackageTags>
     </PropertyGroup>
 </Project>
