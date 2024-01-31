@@ -2,9 +2,10 @@ name: CI
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "main", "htmx-version-2" ]
   pull_request:
     branches: [ "main" ]
+  workflow_dispatch:
 
 jobs:
   build-and-test:
@@ -35,7 +36,7 @@ jobs:
     - name: Setup .NET
       uses: actions/setup-dotnet@v3
       with:
-        dotnet-version: "7.0"
+        dotnet-version: "8.0"
     - name: Package Common library
       run: dotnet pack src/Common/Giraffe.Htmx.Common.fsproj -c Release
     - name: Move Common package
