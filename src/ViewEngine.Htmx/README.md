@@ -2,11 +2,13 @@
 
 This package enables [htmx](https://htmx.org) support within the [Giraffe](https://giraffe.wiki) view engine.
 
-**htmx version: 1.9.10**
+**htmx version: 2.0.0-alpha1**
+
+_Note that this is an ALPHA release of htmx 2.0; see [the migration guide](https://v2-0v2-0.htmx.org/migration-guide-htmx-1/) for changes_
 
 ### Setup
 
-1. Install the package.
+1. Install the package (must use `--Prelease` flag).
 2. Prior to using the attribute or support modules, `open Giraffe.ViewEngine.Htmx`.
 
 ### Use

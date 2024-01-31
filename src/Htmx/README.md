@@ -2,11 +2,13 @@
 
 This package enables server-side support for [htmx](https://htmx.org) within [Giraffe](https://giraffe.wiki) and ASP.NET's `HttpContext`.
 
-**htmx version: 1.9.10**
+**htmx version: 2.0.0-alpha1**
+
+_Note that htmx 2.0 is an ALPHA release. The [migration guide](https://v2-0v2-0.htmx.org/migration-guide-htmx-1/) does not currently specify any request or response header changes. This means that, as of this release, there are no required code changes in moving to this major version._
 
 ### Setup
 
-1. Install the package.
+1. Install the package (must use `--Prerelease` flag).
 2. Prior to using the request header extension properties or the header-setting `HttpHandler`s, `open Giraffe.Htmx`.
 
 ### Use

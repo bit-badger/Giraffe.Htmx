@@ -820,14 +820,14 @@ let script =
             let html = RenderView.AsString.htmlNode Script.minified
             Expect.equal
                 html
-                """<script src="https://unpkg.com/htmx.org@1.9.10" integrity="sha384-D1Kt99CQMDuVetoL1lrYwg5t+9QdHe7NLX/SoJYkXDFfX37iInKRy5xLSi8nO7UC" crossorigin="anonymous"></script>"""
+                """<script src="https://unpkg.com/htmx.org@2.0.0-alpha1" integrity="sha384-KGfWLOUs4pJD2kawhHdm4vgr/cEAofjPPagKWIZ/YnYDQ2bcthCK5LRfBMr7zco+" crossorigin="anonymous"></script>"""
                 "Minified script tag is incorrect"
         }
         test "unminified succeeds" {
             let html = RenderView.AsString.htmlNode Script.unminified
             Expect.equal
                 html
-                """<script src="https://unpkg.com/htmx.org@1.9.10/dist/htmx.js" integrity="sha384-j1TtLExqttdT7C3Z/rJy8UZcCGiuqwwN9++coZ6up+5O/l2FHdp3IGfuJOvst6d1" crossorigin="anonymous"></script>"""
+                """<script src="https://unpkg.com/htmx.org@2.0.0-alpha1/dist/htmx.js" integrity="sha384-2kZGZBH6t8d5fRh0/kvj/fwwVwnnTpwcLOhp0t8F0/mXWF5M5iPbo/ygeFN2cFbG" crossorigin="anonymous"></script>"""
                 "Unminified script tag is incorrect"
         }
     ]
