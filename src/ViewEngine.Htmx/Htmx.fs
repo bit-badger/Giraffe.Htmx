@@ -317,8 +317,6 @@ module HxVals =
     /// Create values from a list of key/value pairs
     let From = toJson
 
-open System
-
 /// Attributes and flags for htmx
 [<AutoOpen>]
 module HtmxAttrs =
@@ -368,10 +366,6 @@ module HtmxAttrs =
     /// Overrides a previous `hx-boost`
     let _hxNoBoost    = attr "hx-boost" "false"
     
-    /// Attach an event handler for DOM or htmx events
-    [<Obsolete "This will be removed in htmx 2; use _hxOnEvent or _hxOnHxEvent instead">]
-    let _hxOn         = attr "hx-on"
-
     /// Attach an event handler for DOM events
     let _hxOnEvent evtName =
         attr $"hx-on:%s{evtName}"
@@ -450,14 +444,14 @@ module Script =
   
     /// Script tag to load the minified version from unpkg.com
     let minified =
-        script [ _src         "https://unpkg.com/htmx.org@2.0.0-alpha1"
-                 _integrity   "sha384-KGfWLOUs4pJD2kawhHdm4vgr/cEAofjPPagKWIZ/YnYDQ2bcthCK5LRfBMr7zco+"
+        script [ _src         "https://unpkg.com/htmx.org@2.0.0-alpha2"
+                 _integrity   "sha384-291pOdLqD0RmU6d5pyz/xmHmZZPhEv465X4AJDWvc8n0KrWrD65qaf2fk0xmsrJe"
                  _crossorigin "anonymous" ] []
 
     /// Script tag to load the unminified version from unpkg.com
     let unminified =
-        script [ _src         "https://unpkg.com/htmx.org@2.0.0-alpha1/dist/htmx.js"
-                 _integrity   "sha384-2kZGZBH6t8d5fRh0/kvj/fwwVwnnTpwcLOhp0t8F0/mXWF5M5iPbo/ygeFN2cFbG"
+        script [ _src         "https://unpkg.com/htmx.org@2.0.0-alpha2/dist/htmx.js"
+                 _integrity   "sha384-4Owd2qj8qFNBZ8QiR2ItYnNuMGgpOxaDT1uuRJXziuB1lvvKGYA/Lxy/oVM6q3h1"
                  _crossorigin "anonymous" ] []
 
 

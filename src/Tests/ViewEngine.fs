@@ -820,14 +820,14 @@ let script =
             let html = RenderView.AsString.htmlNode Script.minified
             Expect.equal
                 html
-                """<script src="https://unpkg.com/htmx.org@2.0.0-alpha1" integrity="sha384-KGfWLOUs4pJD2kawhHdm4vgr/cEAofjPPagKWIZ/YnYDQ2bcthCK5LRfBMr7zco+" crossorigin="anonymous"></script>"""
+                """<script src="https://unpkg.com/htmx.org@2.0.0-alpha2" integrity="sha384-291pOdLqD0RmU6d5pyz/xmHmZZPhEv465X4AJDWvc8n0KrWrD65qaf2fk0xmsrJe" crossorigin="anonymous"></script>"""
                 "Minified script tag is incorrect"
         }
         test "unminified succeeds" {
             let html = RenderView.AsString.htmlNode Script.unminified
             Expect.equal
                 html
-                """<script src="https://unpkg.com/htmx.org@2.0.0-alpha1/dist/htmx.js" integrity="sha384-2kZGZBH6t8d5fRh0/kvj/fwwVwnnTpwcLOhp0t8F0/mXWF5M5iPbo/ygeFN2cFbG" crossorigin="anonymous"></script>"""
+                """<script src="https://unpkg.com/htmx.org@2.0.0-alpha2/dist/htmx.js" integrity="sha384-4Owd2qj8qFNBZ8QiR2ItYnNuMGgpOxaDT1uuRJXziuB1lvvKGYA/Lxy/oVM6q3h1" crossorigin="anonymous"></script>"""
                 "Unminified script tag is incorrect"
         }
     ]
@@ -979,18 +979,6 @@ let renderFragment =
         ]
     ]
 
-#nowarn "44"
-
-/// Tests for the HtmxAttrs module
-let deprecatedAttributes =
-    testList "Deprecated Attributes" [
-        test "_hxOn succeeds" {
-            let newLine = "\n"
-            strong [ _hxOn "submit: alert('oops')\nclick: alert('howdy!')" ] []
-            |> shouldRender $"""<strong hx-on="submit: alert(&#39;oops&#39;){newLine}click: alert(&#39;howdy!&#39;)"></strong>"""
-        }
-    ]
-
 /// All tests in this module
 let allTests =
     testList "ViewEngine.Htmx" [
@@ -1004,5 +992,4 @@ let allTests =
         attributes
         script
         renderFragment
-        deprecatedAttributes
     ]

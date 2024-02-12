@@ -2,7 +2,7 @@
 
 This package enables [htmx](https://htmx.org) support within the [Giraffe](https://giraffe.wiki) view engine.
 
-**htmx version: 2.0.0-alpha1**
+**htmx version: 2.0.0-alpha2**
 
 _Note that this is an ALPHA release of htmx 2.0; see [the migration guide](https://v2-0v2-0.htmx.org/migration-guide-htmx-1/) for changes_
 

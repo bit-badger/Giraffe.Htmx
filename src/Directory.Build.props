@@ -3,8 +3,8 @@
     <PropertyGroup>
         <TargetFrameworks>net6.0;net7.0;net8.0</TargetFrameworks>
         <VersionPrefix>2.0.0</VersionPrefix>
-        <VersionSuffix>alpha1</VersionSuffix>
-        <PackageReleaseNotes>Update script tags to pull htmx 2.0.0-alpha1</PackageReleaseNotes>
+        <VersionSuffix>alpha2</VersionSuffix>
+        <PackageReleaseNotes>Update script tags to pull htmx 2.0.0-alpha2; remove deprecated _hxOn attribute</PackageReleaseNotes>
         <Authors>danieljsummers</Authors>
         <Company>Bit Badger Solutions</Company>
         <PackageProjectUrl>https://github.com/bit-badger/Giraffe.Htmx</PackageProjectUrl>
