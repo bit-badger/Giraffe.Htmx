@@ -2,8 +2,8 @@
 <Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
     <PropertyGroup>
         <TargetFrameworks>net6.0;net7.0;net8.0</TargetFrameworks>
-        <VersionPrefix>1.9.10</VersionPrefix>
-        <PackageReleaseNotes>Update script tags to pull htmx 1.9.10; add support for hx-on:* attributes; require lowest FSharp.Core version; fix _hxDisabledElt spelling</PackageReleaseNotes>
+        <VersionPrefix>1.9.11</VersionPrefix>
+        <PackageReleaseNotes>Update script tags to pull htmx 1.9.11</PackageReleaseNotes>
         <Authors>danieljsummers</Authors>
         <Company>Bit Badger Solutions</Company>
         <PackageProjectUrl>https://github.com/bit-badger/Giraffe.Htmx</PackageProjectUrl>
