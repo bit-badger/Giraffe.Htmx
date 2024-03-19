@@ -21,22 +21,23 @@ In addition to the regular HTTP request payloads, htmx sets [one or more headers
 A server may want to respond to a request that originated from htmx differently than a regular request. One way htmx can provide the same feel as a Single Page Application (SPA) is by swapping out the `body` content (or an element within it) instead of reloading the entire page. In this case, the developer can provide a partial layout to be used for these responses, while returning the full page for regular requests. The `IsHtmx` property makes this easy...
 
 ```fsharp
-  // "partial" and "full" are handlers that return the contents;
-  // "view" can be whatever your view engine needs for the body of the page
-  let result view : HttpHandler =
+// "partial" and "full" are handlers that return the contents;
+// "view" can be whatever your view engine needs for the body of the page
+let result view : HttpHandler =
     fun next ctx ->
-      match ctx.Request.IsHtmx && not ctx.Request.IsHtmxRefresh with
-      | true -> partial view
-      | false -> full view
+        if ctx.Request.IsHtmx && not ctx.Request.IsHtmxRefresh then
+            partial view
+        else
+            full view
 ```
 
 htmx also utilizes [response headers](https://htmx.org/docs/#response_headers) to affect client-side behavior. For each of these, this library provides `HttpHandler`s that can be chained along with the response. As an example, if the server returns a redirect response (301, 302, 303, 307), the `XMLHttpRequest` handler on the client will follow the redirection before htmx can do anything with it. To redirect to a new page, you would return an OK (200) response with an `HX-Redirect` header set in the response.
 
 ```fsharp
-  let theHandler : HttpHandler =
+let theHandler : HttpHandler =
     fun next ctx ->
-      // some interesting stuff
-      withHxRedirect "/the-new-url" >=> Successful.OK
+        // some interesting stuff
+        withHxRedirect "/the-new-url" >=> Successful.OK
 ```
 
 Of note is that the `HX-Trigger` headers can take either one or more events. For a single event with no parameters, use `withHxTrigger`; for a single event with parameters, or multiple events, use `withHxTriggerMany`. Both these have `AfterSettle` and `AfterSwap` versions as well.
@@ -48,8 +49,10 @@ As htmx uses [attributes](https://htmx.org/docs/#attributes) to extend HTML, the
 As an example, creating a `div` that loads data once the HTML is rendered:
 
 ```fsharp
-  let autoload =
-    div [ _hxGet "/lazy-load-data"; _hxTrigger "load" ] [ str "Loading..." ]
+let autoload =
+    div [ _hxGet "/lazy-load-data"; _hxTrigger HxTrigger.Load ] [
+        str "Loading..."
+    ]
 ```
 
 _(As `hx-boost="true"` is the usual desire for boosting, `_hxBoost` implies true. To disable it for an element, use `_hxNoBoost` instead.)_
@@ -57,10 +60,10 @@ _(As `hx-boost="true"` is the usual desire for boosting, `_hxBoost` implies true
 Some attributes have known values, such as `hx-trigger` and `hx-swap`; for these, there are modules with those values. For example, `HxTrigger.Load` could be used in the example above, to ensure that the known values are spelled correctly. `hx-trigger` can also take modifiers, such as an action that only responds to `Ctrl`+click. The `HxTrigger` module has a `Filter` submodule to assist with defining these actions.
 
 ```fsharp
-  let shiftClick =
+let shiftClick =
     p [ _hxGet = "/something"; _hxTrigger (HxTrigger.Filter.Shift HxTrigger.Click) ] [
-      str "hold down Shift and click me"
-      ]
+        str "hold down Shift and click me"
+    ]
 ```
 
 If you want to load htmx from unpkg, `Htmx.Script.minified` or `Htmx.Script.unminified` can be used to load the script in your HTML trees.

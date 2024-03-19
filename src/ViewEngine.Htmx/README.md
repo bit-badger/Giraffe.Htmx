@@ -2,9 +2,9 @@
 
 This package enables [htmx](https://htmx.org) support within the [Giraffe](https://giraffe.wiki) view engine.
 
-**htmx version: 2.0.0-alpha2**
+**htmx version: 2.0.0-beta1**
 
-_Note that this is an ALPHA release of htmx 2.0; see [the migration guide](https://v2-0v2-0.htmx.org/migration-guide-htmx-1/) for changes_
+_Note that this is a BETA release of htmx 2.0; see [the migration guide](https://v2-0v2-0.htmx.org/migration-guide-htmx-1/) for changes_
 
 ### Setup
 
@@ -16,7 +16,7 @@ _Note that this is an ALPHA release of htmx 2.0; see [the migration guide](https
 Following Giraffe View Engine's lead, there are a set of attribute functions for htmx; for many of the attributes, there are also helper modules to assist with typing the values. The example below utilizes both:
 
 ```fsharp
-  let autoload =
+let autoload =
     div [ _hxGet "/this/data"; _hxTrigger HxTrigger.Load ] [ str "Loading..." ]
 ```
 
@@ -45,19 +45,19 @@ The support modules contain named properties for known values (as illustrated wi
 - `HxRequest` has a `Configure` function, which takes a list of strings; the other functions in the module allow for configuring the request.
 
 ```fsharp
-  HxRequest.Configure [ HxRequest.Timeout 500 ] |> _hxRequest 
+HxRequest.Configure [ HxRequest.Timeout 500 ] |> _hxRequest 
 ```
 - `HxTrigger` is _(by far)_ the most complex of these modules. Most uses won't need that complexity; however, complex triggers can be defined by piping into or composing with other functions. For example, to define an event that responds to a shift-click anywhere on the document, with a delay of 3 seconds before firing:
 
 ```fsharp
-  HxTrigger.Click
-  |> HxTrigger.Filter.Shift
-  |> HxTrigger.FromDocument
-  |> HxTrigger.Delay "3s"
-  |> _hxTrigger
-  
-  // or
-  
-  (HxTrigger.Filter.Shift >> HxTrigger.FromDocument >> HxTrigger.Delay "3s") HxTrigger.Click
-  |> _hxTrigger
+HxTrigger.Click
+|> HxTrigger.Filter.Shift
+|> HxTrigger.FromDocument
+|> HxTrigger.Delay "3s"
+|> _hxTrigger
+
+// or
+
+(HxTrigger.Filter.Shift >> HxTrigger.FromDocument >> HxTrigger.Delay "3s") HxTrigger.Click
+|> _hxTrigger
 ```

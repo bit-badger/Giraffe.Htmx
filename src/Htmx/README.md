@@ -2,9 +2,9 @@
 
 This package enables server-side support for [htmx](https://htmx.org) within [Giraffe](https://giraffe.wiki) and ASP.NET's `HttpContext`.
 
-**htmx version: 2.0.0-alpha2**
+**htmx version: 2.0.0-beta1**
 
-_Note that htmx 2.0 is an ALPHA release. The [migration guide](https://v2-0v2-0.htmx.org/migration-guide-htmx-1/) does not currently specify any request or response header changes. This means that, as of this release, there are no required code changes in moving to this major version._
+_Note that htmx 2.0 is a BETA release. The [migration guide](https://v2-0v2-0.htmx.org/migration-guide-htmx-1/) does not currently specify any request or response header changes. This means that, as of this release, there are no required code changes in moving to this major version._
 
 ### Setup
 
@@ -16,20 +16,20 @@ _Note that htmx 2.0 is an ALPHA release. The [migration guide](https://v2-0v2-0.
 To obtain a request header, using the `IHeaderDictionary` extension properties:
 
 ```fsharp
-  let myHandler : HttpHander =
+let myHandler : HttpHander =
     fun next ctx ->
-      match ctx.HxPrompt with
-      | Some prompt -> ... // do something with the text the user provided
-      | None -> ... // no text provided
+        match ctx.HxPrompt with
+        | Some prompt -> ... // do something with the text the user provided
+        | None -> ... // no text provided
 ```
 
 To set a response header:
 
 ```fsharp
-  let myHandler : HttpHander =
+let myHandler : HttpHander =
     fun next ctx ->
-      // some meaningful work
-      withHxPushUrl "/some/new/url" >=> [other handlers]
+        // some meaningful work
+        withHxPushUrl "/some/new/url" >=> [other handlers]
 ```
 
 The `HxSwap` module has constants to use for the `HX-Reswap` header. These may be extended with settle, show, and other qualifiers; see the htmx documentation for the `hx-swap` attribute for more information.
