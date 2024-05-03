@@ -444,6 +444,12 @@ module HtmxAttrs =
     /// Establishes a WebSocket or sends information to one
     let _hxWs         = attr "hx-ws"
 
+    /// The name of the message to swap into the DOM.
+    let _sseSwap      = attr "sse-swap"
+
+    /// The URL of the SSE server.
+    let _sseConnect   = attr "sse-connect"
+
 
 /// Script tags to pull htmx into an web page
 module Script =
