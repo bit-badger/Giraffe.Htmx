@@ -811,6 +811,12 @@ let attributes =
         test "_hxWs succeeds" {
             ul [ _hxWs "connect:/web-socket" ] [] |> shouldRender """<ul hx-ws="connect:/web-socket"></ul>"""
         }
+        test "_sseSwap succeeds" {
+            ul [ _sseSwap "sseMessageName" ] [] |> shouldRender """<ul sse-swap="sseMessageName"></ul>"""
+        }
+        test "_sseConnect succeeds" {
+            div [ _sseConnect "/gps/sse" ] [] |> shouldRender """<div sse-connect="/gps/sse"></div>"""
+        }
     ]
 
 /// Tests for the Script module
